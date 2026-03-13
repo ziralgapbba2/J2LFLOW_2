@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>J2L FLOW — AI 기반 가전 서비스 솔루션</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   :root {
@@ -1536,6 +1536,121 @@
       ? 'rgba(8,12,20,0.95)'
       : 'rgba(8,12,20,0.85)';
   });
+
+  // ── 모달 열기 / 닫기 ──────────────────────────────────
+  const overlay = document.getElementById('modal-overlay');
+
+  function openModal() {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+    document.getElementById('form-result').style.display = 'none';
+    document.getElementById('contact-form').reset();
+  }
+
+  // 트리거 버튼들 — nav, hero, CTA 모두 연결
+  document.querySelectorAll('.nav-cta, #cta .btn-primary').forEach(btn => {
+    btn.addEventListener('click', openModal);
+  });
+
+  // Hero '도입 문의' 버튼 (btn-ghost, 솔루션 알아보기 제외)
+  document.querySelectorAll('#hero .btn-ghost').forEach(btn => {
+    btn.addEventListener('click', openModal);
+  });
+
+  // 닫기 버튼 / 취소 버튼 / 오버레이 클릭
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+  // ESC 키
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ── EmailJS 폼 전송 ───────────────────────────────────
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+
+  // ── EmailJS 초기화 (defer 로드 후 실행 보장) ─────────────
+  function initEmailJS() {
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    } else {
+      setTimeout(initEmailJS, 100);
+    }
+  }
+  initEmailJS();
+
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const company  = document.getElementById('f-company').value.trim();
+    const name     = document.getElementById('f-name').value.trim();
+    const phone    = document.getElementById('f-phone').value.trim();
+    const email    = document.getElementById('f-email').value.trim();
+    const typeEl   = document.querySelector('input[name="inquiry-type"]:checked');
+    const message  = document.getElementById('f-message').value.trim();
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (!company || !name || !phone || !typeEl) {
+      showResult('warning', '⚠ &nbsp;필수 항목을 모두 입력해 주세요.');
+      return;
+    }
+
+    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+      showResult('warning', '⚠ &nbsp;EmailJS 키가 설정되지 않았습니다.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;관리자에게 문의해 주세요.');
+      return;
+    }
+
+    submitBtn.textContent = '⏳ 전송 중...';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email     : 'j2lflow_1@naver.com',
+      from_company : company,
+      from_name    : name,
+      from_phone   : phone,
+      from_email   : email,
+      inquiry_type : typeEl.value,
+      message      : message,
+    })
+    .then(() => {
+      showResult('success',
+        '✅ &nbsp;문의가 성공적으로 전송되었습니다.<br>' +
+        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;빠른 시일 내에 답변 드리겠습니다.');
+      document.getElementById('contact-form').reset();
+      submitBtn.textContent = '✉ &nbsp;문의 전송하기';
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    })
+    .catch((err) => {
+      console.error('EmailJS error:', err);
+      showResult('error',
+        '❌ &nbsp;전송 중 오류가 발생했습니다.<br>' +
+        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;잠시 후 다시 시도해 주세요.');
+      submitBtn.textContent = '✉ &nbsp;문의 전송하기';
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    });
+  });
+
+  function showResult(type, html) {
+    const el = document.getElementById('form-result');
+    const colors = {
+      success: { bg: 'rgba(0,255,157,0.08)', border: 'rgba(0,255,157,0.3)', color: '#00ff9d' },
+      error:   { bg: 'rgba(255,80,80,0.08)',  border: 'rgba(255,80,80,0.3)',  color: '#ff6060' },
+      warning: { bg: 'rgba(255,200,0,0.08)',  border: 'rgba(255,200,0,0.3)',  color: '#ffc800' },
+    };
+    const c = colors[type];
+    el.style.cssText = `display:block; padding:0.85rem 1rem; margin-bottom:1rem;
+      font-size:0.8rem; font-family:'JetBrains Mono',monospace; line-height:1.6;
+      background:${c.bg}; border:1px solid ${c.border}; color:${c.color};`;
+    el.innerHTML = html;
+  }
 </script>
 <!-- ── PDF 전용 출력 템플릿 (Landscape A4, 화면에는 숨김) ── -->
 <div id="pdf-source" style="display:none; font-family:'Noto Sans KR',sans-serif;">
@@ -1810,7 +1925,7 @@
 .lp-closing-line { font-size:7.5px; color:rgba(255,255,255,0.55); margin-bottom:3px; font-family:'JetBrains Mono',monospace; }
 </style>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   document.getElementById('download-btn').addEventListener('click', function() {
     const btn = this;
     btn.textContent = '⏳ PDF 생성 중...';
