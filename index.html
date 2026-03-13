@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J2L FLOW — AI 기반 가전 서비스 솔루션</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root {
+    --bg: #080c14;
+    --bg2: #0d1525;
+    --bg3: #111d33;
+    --accent: #00d4ff;
+    --accent2: #0057ff;
+    --accent3: #00ff9d;
+    --text: #e8edf5;
+    --muted: #6a7d99;
+    --border: rgba(0,212,255,0.15);
+    --glow: rgba(0,212,255,0.25);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(8,12,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.85rem;
+    letter-spacing: 0.08em; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    border: 1px solid var(--accent); color: var(--accent);
+    background: transparent; padding: 0.5rem 1.4rem;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 0.82rem;
+    letter-spacing: 0.05em; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 80% 50%, rgba(0,87,255,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,212,255,0.07) 0%, transparent 50%);
+  }
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+  .hero-left { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent3);
+    border: 1px solid rgba(0,255,157,0.3);
+    padding: 0.3rem 0.8rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.8rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-title .accent { color: var(--accent); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 1rem; line-height: 1.8;
+    color: var(--muted); max-width: 480px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: var(--bg); padding: 0.9rem 2.2rem;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem;
+    font-weight: 500; border: none; cursor: pointer;
+    letter-spacing: 0.05em; transition: opacity 0.3s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--text);
+    background: transparent; padding: 0.9rem 2.2rem;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem;
+    cursor: pointer; letter-spacing: 0.05em;
+    transition: border-color 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Hero right: visual */
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .hero-viz {
+    width: 420px; height: 420px; position: relative;
+    animation: fadeIn 1.2s 0.4s ease both;
+  }
+  .viz-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid var(--border);
+    animation: spin linear infinite;
+  }
+  .viz-ring:nth-child(1) { inset: 0; animation-duration: 20s; }
+  .viz-ring:nth-child(2) { inset: 15%; animation-duration: 15s; animation-direction: reverse; border-color: rgba(0,87,255,0.2); }
+  .viz-ring:nth-child(3) { inset: 30%; animation-duration: 10s; border-color: rgba(0,255,157,0.15); }
+  .viz-dot {
+    position: absolute; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 15px var(--accent);
+    top: 0; left: 50%; transform: translateX(-50%);
+  }
+  .viz-dot2 {
+    background: var(--accent2);
+    box-shadow: 0 0 15px var(--accent2);
+    top: 50%; left: 100%; transform: translate(-50%, -50%);
+  }
+  .viz-dot3 {
+    background: var(--accent3);
+    box-shadow: 0 0 15px var(--accent3);
+    top: 100%; left: 50%; transform: translateX(-50%);
+  }
+  .viz-center {
+    position: absolute; inset: 35%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 40px var(--glow);
+  }
+  .viz-center-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .viz-center-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; color: var(--muted); letter-spacing: 0.15em;
+  }
+  .stats-bar {
+    position: absolute; bottom: -30px; left: 0; right: 0;
+    display: flex; gap: 1px;
+  }
+  .stats-bar span {
+    flex: 1; height: 3px;
+    background: var(--border);
+    position: relative; overflow: hidden;
+  }
+  .stats-bar span::after {
+    content:''; position: absolute; top: 0; left: 0; bottom: 0;
+    background: var(--accent);
+    animation: barFill 2s ease both;
+  }
+  .stats-bar span:nth-child(1)::after { width: 85%; animation-delay: 0.8s; }
+  .stats-bar span:nth-child(2)::after { width: 62%; animation-delay: 1s; background: var(--accent2); }
+  .stats-bar span:nth-child(3)::after { width: 91%; animation-delay: 1.2s; background: var(--accent3); }
+  .stats-bar span:nth-child(4)::after { width: 74%; animation-delay: 1.4s; }
+
+  /* ── METRICS ── */
+  #metrics {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 5%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+  }
+  .metric {
+    padding: 2rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .metric:last-child { border-right: none; }
+  .metric-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .metric-label {
+    font-size: 0.78rem; color: var(--muted);
+    letter-spacing: 0.06em; margin-top: 0.4rem;
+  }
+
+  /* ── SECTION COMMON ── */
+  section {
+    padding: 80px 8%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--accent3);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .section-desc {
+    color: var(--muted); font-size: 0.95rem;
+    line-height: 1.8; max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── PROCESS ── */
+  #process { background: var(--bg); }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .process-grid::before {
+    content: '';
+    position: absolute;
+    top: 60px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), var(--accent3), transparent);
+    z-index: 0;
+  }
+  .process-step {
+    padding: 0 1.5rem;
+    text-align: center;
+    position: relative; z-index: 1;
+  }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+    letter-spacing: 0.15em; margin-bottom: 0.5rem;
+  }
+  .step-icon {
+    width: 120px; height: 120px;
+    margin: 0 auto 1.5rem;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .process-step:hover .step-icon {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--glow);
+  }
+  .step-icon::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -12px; right: -12px;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-name {
+    font-size: 1.1rem; font-weight: 500;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+  .step-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── AI FEATURES ── */
+  #ai { background: var(--bg2); }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .feature-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+  .feature-card.large { grid-column: span 2; }
+  .feature-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .feature-card:hover::after { transform: scaleX(1); }
+  .feature-icon {
+    font-size: 2rem; margin-bottom: 1.2rem;
+    display: block;
+  }
+  .feature-title {
+    font-size: 1.15rem; font-weight: 700;
+    margin-bottom: 0.8rem; letter-spacing: 0.03em;
+  }
+  .feature-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+  .feature-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--accent3);
+    border: 1px solid rgba(0,255,157,0.3);
+    padding: 0.2rem 0.6rem;
+    margin-top: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── QUALITY / RCA ── */
+  #quality { background: var(--bg); }
+  .rca-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+  .rca-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+  }
+  .rca-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem; line-height: 1;
+    color: var(--border);
+    margin-bottom: 1rem;
+  }
+  .rca-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .rca-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+  .rca-card:nth-child(1) .rca-num { color: rgba(0,212,255,0.2); }
+  .rca-card:nth-child(2) .rca-num { color: rgba(0,87,255,0.2); }
+  .rca-card:nth-child(3) .rca-num { color: rgba(0,255,157,0.2); }
+
+  /* KPI Table */
+  .kpi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .kpi-table th {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .kpi-table td {
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    color: var(--muted);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  .kpi-table tr:hover td { background: rgba(0,212,255,0.03); }
+  .kpi-tag {
+    display: inline-block;
+    background: rgba(0,255,157,0.1);
+    color: var(--accent3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── KPI GOALS ── */
+  #kpi { background: var(--bg2); }
+  .kpi-goals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .kpi-goal {
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    display: flex; gap: 2rem; align-items: flex-start;
+    background: var(--bg);
+    transition: border-color 0.3s;
+  }
+  .kpi-goal:hover { border-color: var(--accent); }
+  .kpi-goal-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; line-height: 1;
+    color: var(--accent); flex-shrink: 0;
+  }
+  .kpi-goal-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .kpi-goal-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+  /* ── FOOTER / CTA ── */
+  #cta {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 80px 8%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,87,255,0.1), transparent);
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .cta-title span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cta-sub {
+    color: var(--muted); font-size: 1rem;
+    max-width: 500px; margin: 0 auto 3rem;
+    line-height: 1.8; position: relative;
+  }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; position: relative; }
+
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 2rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes barFill {
+    from { width: 0; }
+  }
+
+  /* Scroll reveal — purely visual, never hides content */
+  .reveal { opacity: 1 !important; transform: none !important; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    section { min-height: auto; padding: 60px 5%; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    #metrics { grid-template-columns: repeat(2,1fr); }
+    .metric { border-right: none; border-bottom: 1px solid var(--border); }
+    .process-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .process-grid::before { display: none; }
+    .features-grid, .rca-grid, .kpi-goals { grid-template-columns: 1fr; }
+    .feature-card.large { grid-column: span 1; }
+  }
+
+  /* ── 인쇄 전용 스타일 ── */
+  @media print {
+    /* 기본 설정 */
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    /* 화면 전용 UI 숨김 */
+    nav,
+    #biz-tabs,
+    #modal-overlay,
+    #pdf-source,
+    footer,
+    .cta-btns,
+    .biz-anchor {
+      display: none !important;
+    }
+
+    body {
+      background: #080c14 !important;
+      margin: 0; padding: 0;
+    }
+
+    /* 각 인쇄 페이지 단위 — 정확히 A4 1장 */
+    .print-page {
+      width: 100vw;
+      height: 100vh;
+      page-break-before: always;
+      page-break-after: always;
+      page-break-inside: avoid;
+      break-before: page;
+      break-after: page;
+      break-inside: avoid;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* 첫 페이지는 page-break-before 제거 */
+    .print-page:first-of-type {
+      page-break-before: auto;
+      break-before: auto;
+    }
+
+    /* Hero: 1페이지 */
+    #hero {
+      width: 100vw; height: 100vh;
+      page-break-before: auto;
+      page-break-after: always;
+      page-break-inside: avoid;
+      break-after: page;
+      break-inside: avoid;
+      overflow: hidden;
+      padding: 60px 8%;
+      display: flex; align-items: center;
+    }
+
+    /* BIZ 배너 + Metrics를 하나의 인쇄 페이지로 묶음 */
+    .biz-intro-page {
+      width: 100vw !important;
+      height: 100vh !important;
+      page-break-before: always !important;
+      page-break-after: always !important;
+      page-break-inside: avoid !important;
+      break-before: page !important;
+      break-after: page !important;
+      break-inside: avoid !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+    }
+
+    /* biz-intro-page 안의 배너와 metrics는 페이지 나눔 없음 */
+    .biz-intro-page .biz-banner {
+      page-break-before: avoid !important;
+      page-break-after: avoid !important;
+      break-before: avoid !important;
+      break-after: avoid !important;
+      padding: 3rem 8% 1.5rem !important;
+    }
+    .biz-intro-page #metrics,
+    .biz-intro-page #metrics-wh {
+      page-break-before: avoid !important;
+      break-before: avoid !important;
+      border-top: 1px solid rgba(0,212,255,0.15) !important;
+    }
+
+    /* 독립 .biz-banner (없어져야 함, 안전장치) */
+    .biz-banner { page-break-before: always; break-before: page; }
+
+    /* 각 섹션 — 새 페이지에서 시작, 1페이지 내에 완결 */
+    section {
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: unset !important;
+      max-height: 100vh !important;
+      padding: 40px 8% !important;
+      page-break-before: always !important;
+      page-break-after: always !important;
+      page-break-inside: avoid !important;
+      break-before: page !important;
+      break-after: page !important;
+      break-inside: avoid !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+    }
+
+    /* Hero는 예외 처리 (이미 위에서 처리) */
+    #hero {
+      page-break-before: auto !important;
+      break-before: auto !important;
+    }
+
+    /* CTA는 마지막 페이지 */
+    #cta {
+      page-break-after: auto !important;
+      break-after: auto !important;
+    }
+
+    /* 섹션 내 글자·그리드 크기 조정 */
+    .section-title { font-size: 2.2rem !important; margin-bottom: 0.5rem !important; }
+    .section-label { margin-bottom: 0.4rem !important; }
+    .section-desc  { margin-bottom: 1.5rem !important; font-size: 0.82rem !important; }
+
+    .process-grid  { gap: 0 !important; }
+    .process-step  { padding: 0 0.8rem !important; }
+    .step-icon     { width: 70px !important; height: 70px !important; font-size: 1.6rem !important; margin-bottom: 0.8rem !important; }
+    .step-name     { font-size: 0.9rem !important; }
+    .step-desc     { font-size: 0.72rem !important; }
+
+    .features-grid { gap: 0.8rem !important; }
+    .feature-card  { padding: 1.2rem !important; }
+    .feature-icon  { font-size: 1.4rem !important; margin-bottom: 0.5rem !important; }
+    .feature-title { font-size: 0.9rem !important; margin-bottom: 0.4rem !important; }
+    .feature-desc  { font-size: 0.72rem !important; }
+    .feature-badge { margin-top: 0.5rem !important; font-size: 0.58rem !important; }
+
+    .rca-grid      { gap: 1rem !important; margin-bottom: 1.5rem !important; }
+    .rca-card      { padding: 1.2rem !important; }
+    .rca-num       { font-size: 2.8rem !important; margin-bottom: 0.4rem !important; }
+    .rca-title     { font-size: 0.9rem !important; margin-bottom: 0.3rem !important; }
+    .rca-desc      { font-size: 0.72rem !important; }
+    .kpi-table     { font-size: 0.75rem !important; }
+    .kpi-table th, .kpi-table td { padding: 0.6rem 1rem !important; }
+
+    .wh-cards, .wh-principles { gap: 1rem !important; }
+    .wh-card, .wh-principle   { padding: 1.2rem !important; }
+    .wh-card-icon  { font-size: 1.4rem !important; margin-bottom: 0.5rem !important; }
+    .wh-card-title, .wh-principle-title { font-size: 0.9rem !important; }
+    .wh-card-desc, .wh-principle-desc   { font-size: 0.72rem !important; }
+    .wh-principle-en { font-size: 1.8rem !important; }
+
+    .so-grid  { gap: 1rem !important; }
+    .so-card  { padding: 1.2rem !important; }
+    .so-icon  { font-size: 1.4rem !important; margin-bottom: 0.5rem !important; }
+    .so-title { font-size: 0.9rem !important; }
+    .so-desc  { font-size: 0.72rem !important; margin-bottom: 0.5rem !important; }
+
+    .kpi-goals { gap: 1rem !important; }
+    .kpi-goal  { padding: 1.2rem !important; }
+    .kpi-goal-num  { font-size: 2.4rem !important; }
+    .kpi-goal-title { font-size: 0.9rem !important; }
+    .kpi-goal-desc  { font-size: 0.72rem !important; }
+
+    .cta-title { font-size: 3rem !important; }
+    .cta-sub   { font-size: 0.85rem !important; }
+
+    /* 배너 + metrics 묶음: 하나의 페이지에 들어가도록 높이 분배 */
+    .biz-banner { padding: 2rem 8% !important; }
+    .biz-banner-title { font-size: 3rem !important; }
+    #metrics, #metrics-wh {
+      padding: 1.5rem 8% !important;
+    }
+    .metric-num   { font-size: 2.4rem !important; }
+    .metric-label { font-size: 0.72rem !important; }
+  }
+</style>
+</head>
+<body>
+<style>
+/* SAFETY: ensure all content is visible */
+.reveal, .reveal * { opacity: 1 !important; visibility: visible !important; }
+</style>
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">J2L FLOW</div>
+  <ul class="nav-links">
+    <li><a href="#repair">리페어 서비스</a></li>
+    <li><a href="#process">운영 프로세스</a></li>
+    <li><a href="#ai">AI 솔루션</a></li>
+    <li><a href="#warehouse">자재창고 운영</a></li>
+    <li><a href="#kpi">성과 목표</a></li>
+  </ul>
+  <button class="nav-cta">문의하기</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">// AI-POWERED SERVICE SOLUTION</div>
+    <h1 class="hero-title">
+      가전 서비스의<br>
+      <span class="line2">패러다임 전환</span>
+    </h1>
+    <p class="hero-sub">
+      단순 수리를 넘어, 데이터 기반 예측 정비와 AI 진단 가속화로
+      가전 애프터서비스의 새로운 기준을 만듭니다.
+      J2L FLOW는 <strong>하이테크 서비스 솔루션 파트너</strong>입니다.
+    </p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">솔루션 알아보기</button>
+      <button class="btn-ghost">도입 문의</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-viz">
+      <div class="viz-ring">
+        <div class="viz-dot"></div>
+        <div class="viz-dot viz-dot2"></div>
+        <div class="viz-dot viz-dot3"></div>
+      </div>
+      <div class="viz-ring"></div>
+      <div class="viz-ring"></div>
+      <div class="viz-center">
+        <div class="viz-center-text">AI</div>
+        <div class="viz-center-sub">DIAGNOSTIC</div>
+      </div>
+      <div class="stats-bar">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 사업 전환 배너 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="biz-tabs">
+  <button class="biz-tab active" data-target="repair">
+    <span class="biz-tab-icon">🔧</span>
+    <span class="biz-tab-label">리페어 서비스</span>
+    <span class="biz-tab-sub">가전 AS 수리 최적화</span>
+  </button>
+  <div class="biz-tab-divider"></div>
+  <button class="biz-tab" data-target="warehouse">
+    <span class="biz-tab-icon">📦</span>
+    <span class="biz-tab-label">자재창고 운영</span>
+    <span class="biz-tab-sub">부품 물류 관리 위탁</span>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- BIZ 01 — 리페어 서비스 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="repair" class="biz-anchor"></div>
+<div class="biz-intro-page biz-intro-repair">
+  <div class="biz-banner biz-banner-repair">
+    <div class="biz-banner-inner">
+      <div class="biz-banner-num">BIZ 01</div>
+      <div class="biz-banner-title">리페어 서비스</div>
+      <div class="biz-banner-sub">AI 기반 가전 수리 프로세스 최적화 및 운영 효율 극대화</div>
+    </div>
+  </div>
+  <!-- METRICS (리페어) -->
+  <div id="metrics">
+  <div class="metric reveal">
+    <div class="metric-num">30%+</div>
+    <div class="metric-label">리드타임 단축 목표</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">0</div>
+    <div class="metric-label">부품 대기 시간 (예측 할당)</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">FTF</div>
+    <div class="metric-label">First Time Fix 역량 강화</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">E2E</div>
+    <div class="metric-label">엔드투엔드 워크플로우</div>
+  </div>
+  </div>
+</div><!-- /.biz-intro-page -->
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-label">// 5-STEP STANDARD WORKFLOW</div>
+  <h2 class="section-title">표준 운영 프로세스</h2>
+  <p class="section-desc">
+    접수부터 출고까지 모든 엔지니어가 균일한 품질로 최적의 리드타임 내
+    서비스를 제공하는 End-to-End 표준 운영 체계입니다.
+  </p>
+  <div class="process-grid">
+    <div class="process-step reveal">
+      <div class="step-num">STEP 01</div>
+      <div class="step-icon" data-num="1">📋</div>
+      <div class="step-name">접수</div>
+      <div class="step-desc">고객 증상 및 제품 이력 정밀 등록, 사용 환경 데이터 1차 수집</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">STEP 02</div>
+      <div class="step-icon" data-num="2">🔍</div>
+      <div class="step-name">진단</div>
+      <div class="step-desc">AI 대시보드 및 유사 사례 매칭을 통한 고장 원인 즉각 판별</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">STEP 03</div>
+      <div class="step-icon" data-num="3">🔧</div>
+      <div class="step-name">수리</div>
+      <div class="step-desc">디지털 작업 절차서에 따른 부품 교체 및 기술 조치 수행</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">STEP 04</div>
+      <div class="step-icon" data-num="4">✅</div>
+      <div class="step-name">검수</div>
+      <div class="step-desc">디지털 체크리스트 기반 품질 보증, 재불량 가능성 원천 차단</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">STEP 05</div>
+      <div class="step-icon" data-num="5">📦</div>
+      <div class="step-name">출고</div>
+      <div class="step-desc">재발 방지 사용 설명 제공 및 최종 인도로 고객 만족도 제고</div>
+    </div>
+  </div>
+</section>
+
+<!-- AI FEATURES -->
+<section id="ai">
+  <div class="section-label">// AI DASHBOARD & INTELLIGENCE</div>
+  <h2 class="section-title">AI 기반 진단 솔루션</h2>
+  <p class="section-desc">
+    데이터 시각화로 엔지니어의 주관적 판단 오류를 배제하고,
+    객관적 증거 기반의 신속한 의사결정을 지원합니다.
+  </p>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">리페어 품질 추이 시각화</div>
+      <div class="feature-desc">고장 발생 트렌드를 실시간 분석하여 유형별 선제적 파악이 가능합니다. 히트맵 분석으로 오진단율을 감소시키고 부품 소요를 최적화합니다.</div>
+      <span class="feature-badge">HEATMAP ANALYSIS</span>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">🔄</span>
+      <div class="feature-title">유사 사례 매칭 &amp; 진단 가속화</div>
+      <div class="feature-desc">현재 증상과 가장 일치하는 과거 수리 성공 사례를 AI가 즉시 제안합니다. 엔지니어 숙련도와 무관하게 진단 시간을 물리적으로 단축합니다.</div>
+      <span class="feature-badge">AI MATCHING</span>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">📈</span>
+      <div class="feature-title">과거 이력 &amp; 실시간 모니터링</div>
+      <div class="feature-desc">제품별 수리 히스토리를 대조하여 반복 결함 여부를 즉각 확인합니다. 클레임 발생 시 데이터 기반 신뢰도 높은 대응 근거를 제공합니다.</div>
+      <span class="feature-badge">REAL-TIME</span>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">⚙️</span>
+      <div class="feature-title">병목 현상 실시간 감시</div>
+      <div class="feature-desc">워크플로우 전반의 latency를 실시간 감시하여 병목 구간을 자동 포착합니다. 즉각적인 인력 재배치와 프로세스 조정으로 서비스 처리 속도를 최대화합니다.</div>
+      <span class="feature-badge">LATENCY CONTROL</span>
+    </div>
+    <div class="feature-card large reveal">
+      <span class="feature-icon">🤝</span>
+      <div class="feature-title">데이터 전략 파트너십 — 원청사 피드백 루프</div>
+      <div class="feature-desc">현장에서 수집된 반복 불량 데이터를 원청사의 설계 및 품질 부서로 즉각 피드백하는 환류 체계를 구축합니다. J2L FLOW는 단순 수리 조직을 넘어, WINIA AID를 비롯한 원청사에게 고부가가치 품질 데이터를 제공하는 <strong>'데이터 전략 파트너'</strong>로 기능합니다.</div>
+      <span class="feature-badge">VALUE CHAIN OPTIMIZATION</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUALITY -->
+<section id="quality">
+  <div class="section-label">// ROOT CAUSE ANALYSIS</div>
+  <h2 class="section-title">재불량 방지 &amp; 품질 일관성</h2>
+  <p class="section-desc">
+    'First Time Fix' 역량 강화를 위한 3대 Pillar 기반 근본 원인 분석 체계로
+    수리 실패 비용을 최소화하고 수익성을 극대화합니다.
+  </p>
+  <div class="rca-grid">
+    <div class="rca-card reveal">
+      <div class="rca-num">01</div>
+      <div class="rca-title">부품 결함 분석</div>
+      <div class="rca-desc">부품 자체의 설계·제조 이슈를 정밀 판별합니다. 데이터로 원청사에 설계 개선을 요청할 수 있는 객관적 근거를 확보합니다.</div>
+    </div>
+    <div class="rca-card reveal">
+      <div class="rca-num">02</div>
+      <div class="rca-title">수리 방식 오류 분석</div>
+      <div class="rca-desc">엔지니어의 작업 절차 미준수 및 기술적 오판을 분석합니다. 디지털 체크리스트로 휴먼 에러를 원천 예방하는 시스템을 적용합니다.</div>
+    </div>
+    <div class="rca-card reveal">
+      <div class="rca-num">03</div>
+      <div class="rca-title">사용자 환경 판별</div>
+      <div class="rca-desc">고객의 오사용이나 가혹한 사용 환경 여부를 판별합니다. 불필요한 재작업 방지와 고객 대상 사용 설명 교육의 근거로 활용합니다.</div>
+    </div>
+  </div>
+  <table class="kpi-table reveal">
+    <thead>
+      <tr>
+        <th>구분</th>
+        <th>AI 데이터 활용 방안</th>
+        <th>핵심 성과 지표 (KPI)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="kpi-tag">진단 고도화</span></td>
+        <td>고장 빈도 및 유형 히트맵(Heatmap) 분석</td>
+        <td>오진단율 감소 및 부품 소요 최적화</td>
+      </tr>
+      <tr>
+        <td><span class="kpi-tag">숙련도 상향</span></td>
+        <td>고난도 수리 사례 DB 및 디지털 가이드 공유</td>
+        <td>초보 엔지니어 리드타임 30% 이상 단축</td>
+      </tr>
+      <tr>
+        <td><span class="kpi-tag">클레임 대응</span></td>
+        <td>데이터 기반 고장 원인 소명 리포트 활용</td>
+        <td>고객 만족도(CSAT) 및 신뢰도 향상</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- BIZ 02 — 자재창고 운영 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="warehouse" class="biz-anchor"></div>
+<div class="biz-intro-page biz-intro-warehouse">
+  <div class="biz-banner biz-banner-warehouse">
+    <div class="biz-banner-inner">
+      <div class="biz-banner-num">BIZ 02</div>
+      <div class="biz-banner-title">자재창고 운영</div>
+      <div class="biz-banner-sub">서비스 부품 물류 관리 위탁 — 정확성 · 신속성 · 유연성</div>
+    </div>
+  </div>
+  <!-- 창고 METRICS -->
+  <div id="metrics-wh">
+  <div class="metric reveal">
+    <div class="metric-num">18Y+</div>
+    <div class="metric-label">가전 서비스 업력</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">ZERO</div>
+    <div class="metric-label">재고 현황 오차 목표</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">S·A</div>
+    <div class="metric-label">급 실시간 알람 대응</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric-num">3대</div>
+    <div class="metric-label">운영 원칙 (정확·신속·유연)</div>
+  </div>
+  </div>
+</div><!-- /.biz-intro-page -->
+
+<!-- 핵심 역량 -->
+<section id="wh-competency">
+  <div class="section-label">// CORE COMPETENCY</div>
+  <h2 class="section-title">핵심 역량</h2>
+  <p class="section-desc">
+    가전 서비스 현장(10년)과 자재창고 운영(8년)의 경험을 결합하여
+    실질적인 현장 니즈를 반영한 전문 관리를 수행합니다.
+  </p>
+  <div class="wh-cards">
+    <div class="wh-card reveal">
+      <div class="wh-card-icon">⚙️</div>
+      <div class="wh-card-title">18년 이상의 업력 시너지</div>
+      <div class="wh-card-desc">가전 서비스 현장(10년)과 자재창고 운영(8년)의 경험을 결합하여 실질적인 현장 니즈를 반영한 관리를 수행합니다.</div>
+    </div>
+    <div class="wh-card reveal">
+      <div class="wh-card-icon">🏭</div>
+      <div class="wh-card-title">창고 리뉴얼 및 최적화</div>
+      <div class="wh-card-desc">창고 리뉴얼 노하우를 바탕으로 비효율을 개선하여 운영 효율성을 향상시킵니다.</div>
+    </div>
+    <div class="wh-card reveal">
+      <div class="wh-card-icon">💻</div>
+      <div class="wh-card-title">원청사 시스템 고도화 활용</div>
+      <div class="wh-card-desc">높은 전산 이해도를 바탕으로 정보를 효율적으로 관리하며 업무의 연속성을 완벽히 보장합니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 운영 3대 원칙 -->
+<section id="wh-principles" style="background:var(--bg2);">
+  <div class="section-label">// VALUE PROPOSITION</div>
+  <h2 class="section-title">운영 3대 원칙</h2>
+  <p class="section-desc">
+    정확성, 신속성, 유연성을 바탕으로 오차 없는 물류 생태계를 조성합니다.
+  </p>
+  <div class="wh-principles">
+    <div class="wh-principle reveal">
+      <div class="wh-principle-head">
+        <div class="wh-principle-en">Accuracy</div>
+        <div class="wh-principle-kr">정확성</div>
+      </div>
+      <div class="wh-principle-bar"></div>
+      <div class="wh-principle-desc">서비스 부품 특성에 맞춘 철저한 재고 관리를 통해 <strong>현황 오차 제로화</strong>를 최우선으로 합니다.</div>
+    </div>
+    <div class="wh-principle reveal">
+      <div class="wh-principle-head">
+        <div class="wh-principle-en" style="background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Speed</div>
+        <div class="wh-principle-kr">신속성</div>
+      </div>
+      <div class="wh-principle-bar" style="background:linear-gradient(90deg,var(--accent2),var(--accent));"></div>
+      <div class="wh-principle-desc">사용량 기반의 로케이션 재배치로 동선을 최적화하고 <strong>입출고 및 회수 처리 속도</strong>를 극대화합니다.</div>
+    </div>
+    <div class="wh-principle reveal">
+      <div class="wh-principle-head">
+        <div class="wh-principle-en" style="background:linear-gradient(135deg,var(--accent3),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Flexibility</div>
+        <div class="wh-principle-kr">유연성</div>
+      </div>
+      <div class="wh-principle-bar" style="background:linear-gradient(90deg,var(--accent3),var(--accent));"></div>
+      <div class="wh-principle-desc">부품 특성이나 고객사 요구에 맞춘 <strong>맞춤형 관리 시스템</strong>을 제공합니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 스마트 운영 -->
+<section id="smart-ops">
+  <div class="section-label">// SMART OPERATION SYSTEM</div>
+  <h2 class="section-title">데이터 기반 스마트 운영</h2>
+  <p class="section-desc">AI와 데이터를 활용하여 선제적인 이슈 대응 체계를 구축합니다.</p>
+  <div class="so-grid">
+    <div class="so-card reveal">
+      <div class="so-icon">📊</div>
+      <div class="so-title">지능형 대시보드 &amp; AI 리포트</div>
+      <div class="so-desc">운영 결과를 데이터화하여 심층 분석 리포트를 정기적으로 제공합니다. 경영 의사결정에 바로 활용 가능한 형태로 납품합니다.</div>
+      <span class="so-badge">ANALYTICS</span>
+    </div>
+    <div class="so-card reveal">
+      <div class="so-icon">🚨</div>
+      <div class="so-title">실시간 이슈 탐지 및 알람</div>
+      <div class="so-desc"><span class="so-highlight">S급·A급</span> 사용량 급변이나 <span class="so-highlight">C급·D급</span> 품절 자재에 대해 즉각 대응하여 고객 불편을 최소화합니다.</div>
+      <span class="so-badge">REAL-TIME ALERT</span>
+    </div>
+    <div class="so-card reveal">
+      <div class="so-icon">📈</div>
+      <div class="so-title">트렌드 분석 정보 공유</div>
+      <div class="so-desc">자재 사용 트렌드를 분석하여 원청사의 의사결정에 필요한 핵심 정보를 지원합니다. 선제적 수급 계획이 가능해집니다.</div>
+      <span class="so-badge">TREND INSIGHT</span>
+    </div>
+    <div class="so-card so-card-wide reveal">
+      <div class="so-icon">🛒</div>
+      <div>
+        <div class="so-title">확장된 서비스 지원 범위 — 쇼핑몰 운영 지원</div>
+        <div class="so-desc">창고 운영을 넘어 비즈니스 전반의 효율성을 극대화합니다. 과거 운영 경험을 토대로 자재 관련 쇼핑몰 및 소모품 판매 업무까지 유연하게 지원 가능합니다.</div>
+        <span class="so-badge">EXTENDED SERVICE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI GOALS (통합) -->
+<section id="kpi" style="background:var(--bg2);">
+  <div class="section-label">// TARGET KPI</div>
+  <h2 class="section-title">4대 핵심 성과 목표</h2>
+  <p class="section-desc">
+    데이터 기반 운영 혁신을 통해 달성할 구체적인 비즈니스 성과 목표입니다.
+  </p>
+  <div class="kpi-goals">
+    <div class="kpi-goal reveal">
+      <div class="kpi-goal-num">01</div>
+      <div>
+        <div class="kpi-goal-title">재불량률 최소화</div>
+        <div class="kpi-goal-desc">RCA 체계 및 디지털 체크리스트를 통한 품질 완결성 확보. 수리 실패 비용(Rework Cost)을 제거하여 운영 수익성을 극대화합니다.</div>
+      </div>
+    </div>
+    <div class="kpi-goal reveal">
+      <div class="kpi-goal-num">02</div>
+      <div>
+        <div class="kpi-goal-title">처리 리드타임 획기적 단축</div>
+        <div class="kpi-goal-desc">병목 제거 및 자재 예측 할당을 통한 운영 가속화. 엔지니어가 제품을 분해하기 전 이미 필요한 부품이 준비되는 환경을 구현합니다.</div>
+      </div>
+    </div>
+    <div class="kpi-goal reveal">
+      <div class="kpi-goal-num">03</div>
+      <div>
+        <div class="kpi-goal-title">고객 만족도 &amp; 신뢰 제고</div>
+        <div class="kpi-goal-desc">데이터 기반의 투명한 고장 설명 및 재발 방지 교육. 고객에게 최상의 경험을 선사하여 브랜드 신뢰도를 높입니다.</div>
+      </div>
+    </div>
+    <div class="kpi-goal reveal">
+      <div class="kpi-goal-num">04</div>
+      <div>
+        <div class="kpi-goal-title">운영 원가 절감</div>
+        <div class="kpi-goal-desc">재작업 및 불필요한 부품 교체 방지를 통한 수익성 극대화. 인건비, 재작업 비용, 자재 물류비를 종합한 원가 분석으로 손실 구간을 제거합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <h2 class="cta-title">
+    <span>하이테크</span> 서비스<br>솔루션 파트너
+  </h2>
+  <p class="cta-sub">
+    엔지니어의 전문 기술 역량에 AI의 강력한 분석력을 결합하여,
+    가전 서비스 시장의 압도적 경쟁력을 구축합니다.
+  </p>
+  <div class="cta-btns">
+    <button class="btn-primary">도입 문의하기</button>
+    <button class="btn-ghost" id="download-btn">자료 다운로드</button>
+  </div>
+</section>
+
+<!-- CONTACT MODAL -->
+<div id="modal-overlay" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
+  <div id="modal" style="
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    width: 100%; max-width: 560px;
+    margin: 1rem;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  ">
+    <!-- Header -->
+    <div style="
+      padding: 2rem 2.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    ">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--accent3); letter-spacing:0.2em; margin-bottom:0.4rem;">// CONTACT US</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em;">문의하기</div>
+      </div>
+      <button id="modal-close" style="
+        background:none; border:1px solid var(--border);
+        color:var(--muted); width:36px; height:36px;
+        font-size:1.1rem; cursor:pointer; flex-shrink:0;
+        transition: border-color 0.2s, color 0.2s;
+      " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">✕</button>
+    </div>
+
+    <!-- Form -->
+    <form id="contact-form" style="padding: 2rem 2.5rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+        <!-- 회사명 -->
+        <div>
+          <label class="form-label">회사명 <span style="color:var(--accent)">*</span></label>
+          <input class="form-input" id="f-company" type="text" placeholder="회사명을 입력하세요" required>
+        </div>
+        <!-- 담당자명 -->
+        <div>
+          <label class="form-label">담당자명 <span style="color:var(--accent)">*</span></label>
+          <input class="form-input" id="f-name" type="text" placeholder="담당자명을 입력하세요" required>
+        </div>
+        <!-- 연락처 -->
+        <div>
+          <label class="form-label">연락처 <span style="color:var(--accent)">*</span></label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="010-0000-0000" required>
+        </div>
+        <!-- 이메일 -->
+        <div>
+          <label class="form-label">이메일 <span style="color:var(--accent)">*</span></label>
+          <input class="form-input" id="f-email" type="email" placeholder="example@company.com" required>
+        </div>
+      </div>
+
+      <!-- 문의유형 -->
+      <div style="margin-bottom:1rem;">
+        <label class="form-label">문의유형 <span style="color:var(--accent)">*</span></label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.4rem;">
+          <label class="radio-label"><input class="radio-input" type="radio" name="inquiry" value="A/S 제휴문의"> A/S 제휴문의</label>
+          <label class="radio-label"><input class="radio-input" type="radio" name="inquiry" value="창고운영 관리 위탁 문의"> 창고운영 관리 위탁 문의</label>
+          <label class="radio-label"><input class="radio-input" type="radio" name="inquiry" value="통합서비스 문의"> 통합서비스 문의</label>
+          <label class="radio-label"><input class="radio-input" type="radio" name="inquiry" value="기타"> 기타</label>
+        </div>
+      </div>
+
+      <!-- 문의내용 -->
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label">문의내용 <span style="color:var(--accent)">*</span></label>
+        <textarea class="form-input" id="f-message" rows="4" placeholder="문의하실 내용을 자유롭게 입력해주세요." required style="resize:vertical; min-height:100px;"></textarea>
+      </div>
+
+      <!-- 전송 결과 메시지 -->
+      <div id="form-result" style="display:none; padding:0.85rem 1rem; margin-bottom:1rem; font-size:0.82rem; font-family:'JetBrains Mono',monospace; letter-spacing:0.03em; line-height:1.5;"></div>
+
+      <div style="display:flex; gap:0.8rem;">
+        <button type="button" id="modal-cancel" style="
+          flex:1; padding:0.9rem;
+          background:none; border:1px solid var(--border);
+          color:var(--muted); font-family:'Noto Sans KR',sans-serif;
+          font-size:0.88rem; cursor:pointer; transition:all 0.2s;
+        " onmouseover="this.style.borderColor='var(--muted)'"
+           onmouseout="this.style.borderColor='var(--border)'">취소</button>
+        <button type="submit" id="submit-btn" style="
+          flex:2; padding:0.9rem;
+          background:linear-gradient(135deg,var(--accent2),var(--accent));
+          border:none; color:var(--bg);
+          font-family:'Noto Sans KR',sans-serif;
+          font-weight:700; font-size:0.88rem;
+          cursor:pointer; letter-spacing:0.05em;
+          transition:opacity 0.2s;
+        ">✉ &nbsp;문의 전송하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  @keyframes modalIn {
+    from { opacity:0; transform:translateY(-20px) scale(0.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .form-label {
+    display:block;
+    font-size:0.75rem;
+    color:var(--muted);
+    letter-spacing:0.05em;
+    margin-bottom:0.4rem;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .form-input {
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:0.65rem 0.9rem;
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:0.85rem;
+    outline:none;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-input:focus {
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(0,212,255,0.08);
+  }
+  .form-input::placeholder { color:var(--muted); opacity:0.6; }
+  .radio-label {
+    display:flex; align-items:center; gap:0.5rem;
+    background:var(--bg); border:1px solid var(--border);
+    padding:0.6rem 0.9rem;
+    font-size:0.82rem; cursor:pointer;
+    transition:border-color 0.2s;
+    user-select:none;
+  }
+  .radio-label:has(.radio-input:checked) {
+    border-color:var(--accent);
+    color:var(--accent);
+    background:rgba(0,212,255,0.05);
+  }
+  .radio-input { accent-color:var(--accent); }
+</style>
+
+<style>
+/* ── 사업 구분 탭 바 ── */
+#biz-tabs {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 64px;
+  z-index: 90;
+}
+.biz-tab {
+  flex: 1;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.1rem 5%;
+  background: none; border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-align: left;
+}
+.biz-tab:hover { background: rgba(0,212,255,0.05); }
+.biz-tab.active { background: rgba(0,212,255,0.08); }
+.biz-tab-icon { font-size: 1.6rem; flex-shrink: 0; }
+.biz-tab-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: 0.08em;
+  color: var(--text);
+}
+.biz-tab-sub {
+  font-size: 0.72rem; color: var(--muted);
+  letter-spacing: 0.05em; margin-top: 0.1rem;
+  display: block;
+}
+.biz-tab-divider {
+  width: 1px; background: var(--border);
+  margin: 0.6rem 0;
+}
+.biz-tab:first-child { border-right: none; }
+
+/* ── 사업 구분 배너 ── */
+.biz-anchor { scroll-margin-top: 120px; }
+
+/* biz-intro-page: 화면에서는 배너+metrics를 자연스럽게 표시 */
+.biz-intro-page {
+  display: flex;
+  flex-direction: column;
+}
+.biz-intro-page .biz-banner {
+  flex: 0 0 auto;
+}
+.biz-intro-page #metrics,
+.biz-intro-page #metrics-wh {
+  flex: 0 0 auto;
+}
+.biz-banner {
+  padding: 3.5rem 5%;
+  position: relative; overflow: hidden;
+}
+.biz-banner-repair {
+  background: linear-gradient(135deg, #050b18 0%, #0a1628 60%, #0d1f3d 100%);
+  border-top: 3px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+}
+.biz-banner-warehouse {
+  background: linear-gradient(135deg, #060e0f 0%, #091a1c 60%, #0b2226 100%);
+  border-top: 3px solid var(--accent3);
+  border-bottom: 1px solid rgba(0,255,157,0.15);
+}
+.biz-banner::after {
+  content: attr(data-label);
+  position: absolute; right: 5%; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem; letter-spacing: 0.1em;
+  opacity: 0.04; color: #fff;
+  pointer-events: none;
+}
+.biz-banner-inner { position: relative; z-index: 1; }
+.biz-banner-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+.biz-banner-repair .biz-banner-num { color: var(--accent); }
+.biz-banner-warehouse .biz-banner-num { color: var(--accent3); }
+.biz-banner-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: 0.06em; color: var(--text);
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+.biz-banner-sub {
+  font-size: 0.92rem; color: var(--muted); letter-spacing: 0.03em;
+}
+
+/* ── 창고 METRICS ── */
+#metrics-wh {
+  background: rgba(0,255,157,0.03);
+  border-top: 1px solid rgba(0,255,157,0.1);
+  border-bottom: 1px solid rgba(0,255,157,0.1);
+  padding: 3rem 5%;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1px;
+}
+#metrics-wh .metric { border-right: 1px solid rgba(0,255,157,0.1); }
+#metrics-wh .metric:last-child { border-right: none; }
+#metrics-wh .metric-num {
+  background: linear-gradient(135deg, var(--accent3), var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* ── 핵심 역량 카드 ── */
+#wh-competency { background: var(--bg); }
+.wh-cards {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+}
+.wh-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 2rem; position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.wh-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent3), var(--accent));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+}
+.wh-card:hover { border-color: var(--accent3); transform: translateY(-4px); }
+.wh-card:hover::before { transform: scaleX(1); }
+.wh-card-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.wh-card-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.7rem; }
+.wh-card-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.8; }
+
+/* ── 3대 원칙 ── */
+#wh-principles { }
+.wh-principles {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+}
+.wh-principle {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 2.5rem 2rem; transition: border-color 0.3s;
+}
+.wh-principle:hover { border-color: var(--accent3); }
+.wh-principle-en {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem; letter-spacing: 0.08em; line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.wh-principle-kr {
+  font-size: 0.75rem; color: var(--muted);
+  letter-spacing: 0.12em; margin-top: 0.2rem;
+}
+.wh-principle-bar {
+  height: 2px; margin: 1rem 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.wh-principle-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+.wh-principle-desc strong { color: var(--text); }
+
+/* ── 스마트 운영 ── */
+#smart-ops { background: var(--bg); }
+.so-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+}
+.so-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 2.5rem 2rem; transition: border-color 0.3s, transform 0.3s;
+}
+.so-card:hover { border-color: var(--accent3); transform: translateY(-3px); }
+.so-card-wide {
+  grid-column: span 3;
+  display: flex; align-items: flex-start; gap: 2rem;
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+}
+.so-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+.so-card-wide .so-icon { flex-shrink: 0; margin-bottom: 0; margin-top: 0.2rem; }
+.so-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.7rem; line-height: 1.4; }
+.so-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+.so-badge {
+  display: inline-block; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--accent3);
+  border: 1px solid rgba(0,255,157,0.3);
+  padding: 0.2rem 0.6rem; letter-spacing: 0.1em;
+}
+.so-highlight {
+  background: rgba(0,255,157,0.1); color: var(--accent3);
+  padding: 0 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+}
+
+@media (max-width: 900px) {
+  .wh-cards, .wh-principles, .so-grid { grid-template-columns: 1fr; }
+  .so-card-wide { grid-column: span 1; flex-direction: column; }
+  #metrics-wh { grid-template-columns: repeat(2,1fr); }
+  .biz-tab-label { font-size: 1rem; }
+}
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">J2L FLOW</div>
+  <div>AI-Powered Appliance Service Solution</div>
+  <div>© 2025 J2L FLOW. All rights reserved.</div>
+</footer>
+
+<script>
+  // Biz tab scroll — window에 직접 등록하여 onclick에서 안전하게 호출
+  window.scrollToBiz = function(id) {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // biz-tab 클릭 이벤트 — data-target 속성으로 처리
+  document.querySelectorAll('.biz-tab[data-target]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      window.scrollToBiz(this.dataset.target);
+    });
+  });
+  // Update active biz tab on scroll
+  const repairEl = document.getElementById('repair');
+  const warehouseEl = document.getElementById('warehouse');
+  const tabs = document.querySelectorAll('.biz-tab');
+  window.addEventListener('scroll', () => {
+    if (!warehouseEl) return;
+    const wTop = warehouseEl.getBoundingClientRect().top;
+    if (wTop <= 200) {
+      tabs[0].classList.remove('active');
+      tabs[1].classList.add('active');
+    } else {
+      tabs[0].classList.add('active');
+      tabs[1].classList.remove('active');
+    }
+  });
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 50
+      ? 'rgba(8,12,20,0.95)'
+      : 'rgba(8,12,20,0.85)';
+  });
+</script>
+<!-- ── PDF 전용 출력 템플릿 (Landscape A4, 화면에는 숨김) ── -->
+<div id="pdf-source" style="display:none; font-family:'Noto Sans KR',sans-serif;">
+
+  <!-- 표지 -->
+  <div class="lp lp-cover">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">AI-POWERED SERVICE SOLUTION</div>
+      <div class="lp-sidebar-logo">J2L FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-sidebar-sub">하이테크 서비스 솔루션 파트너</div>
+      <div class="lp-sidebar-clients">드롱기켄우드코리아<br>CUCKOO 공인 서비스 파트너</div>
+      <div class="lp-sidebar-year">2025</div>
+    </div>
+    <div class="lp-main lp-cover-main">
+      <div class="lp-cover-eyebrow">솔루션 소개서</div>
+      <div class="lp-cover-title">AI 기반<br>가전 수리 프로세스<br>최적화 전략</div>
+      <div class="lp-cover-desc">운영 효율 극대화 및 데이터 기반 품질 경영<br>End-to-End 서비스 혁신 전략</div>
+      <div class="lp-cover-kpis">
+        <div class="lp-cover-kpi"><span class="lp-kv">30%+</span><span class="lp-kl">리드타임 단축</span></div>
+        <div class="lp-cover-kpi"><span class="lp-kv">FTF</span><span class="lp-kl">First Time Fix</span></div>
+        <div class="lp-cover-kpi"><span class="lp-kv">E2E</span><span class="lp-kl">엔드투엔드 관리</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1: 패러다임 변화 -->
+  <div class="lp">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">SECTION 01</div>
+      <div class="lp-sidebar-logo">J2L<br>FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-pnum">01</div>
+    </div>
+    <div class="lp-main">
+      <div class="lp-eyebrow">// PARADIGM SHIFT</div>
+      <div class="lp-title">서비스 운영의 패러다임 변화</div>
+      <div class="lp-divider"></div>
+      <div class="lp-body">가전 서비스 시장에서 AI 기술 도입은 비즈니스 경쟁력의 근간을 재정의하는 디지털 전환(DX)의 핵심 동력입니다. 전통적인 사후 대응적(Reactive) 방식에서 AI 데이터 분석을 통한 선제적(Proactive) 운영 체계로 진화합니다.</div>
+      <div class="lp-cols2" style="margin-top:14px;">
+        <div class="lp-box lp-box-dark">
+          <div class="lp-box-tag" style="color:#ff6b6b;">BEFORE — Reactive</div>
+          <div class="lp-box-title">사후 대응 방식</div>
+          <div class="lp-box-desc">고장 발생 후 조치하는 전통적 방식. 운영 비용 과다, 리드타임 지연, 고객 불만 증가.</div>
+        </div>
+        <div class="lp-box lp-box-blue">
+          <div class="lp-box-tag" style="color:#00d4ff;">AFTER — Proactive</div>
+          <div class="lp-box-title">AI 기반 선제적 대응</div>
+          <div class="lp-box-desc">AI 데이터 분석 기반 예측 정비. 오사용 예방 교육으로 서비스 호출을 사전에 차단합니다.</div>
+        </div>
+      </div>
+      <div class="lp-highlight" style="margin-top:14px;">
+        J2L FLOW는 단순 수리 센터에서 <strong>'데이터 전략 파트너'</strong>로 — 수리 과정에서 추출된 정밀 품질 리포트로 원청사(WINIA AID 등)와의 협업 시너지를 극대화합니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- P2: 5단계 프로세스 -->
+  <div class="lp">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">SECTION 02</div>
+      <div class="lp-sidebar-logo">J2L<br>FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-pnum">02</div>
+    </div>
+    <div class="lp-main">
+      <div class="lp-eyebrow">// 5-STEP STANDARD WORKFLOW</div>
+      <div class="lp-title">표준 운영 프로세스 (End-to-End)</div>
+      <div class="lp-divider"></div>
+      <div class="lp-body">모든 엔지니어가 최적의 리드타임 내에 균일한 품질의 서비스를 제공하는 표준 운영 체계(OpEx)입니다. AI 기반 병목 감지로 전 단계의 latency를 실시간 제어합니다.</div>
+      <div class="lp-steps">
+        <div class="lp-step"><div class="lp-step-top"><div class="lp-step-n">01</div><div class="lp-step-ico">📋</div></div><div class="lp-step-name">접수</div><div class="lp-step-desc">고객 증상 및 제품 이력 정밀 등록, 사용 환경 데이터 1차 수집</div></div>
+        <div class="lp-step-arr">→</div>
+        <div class="lp-step"><div class="lp-step-top"><div class="lp-step-n">02</div><div class="lp-step-ico">🔍</div></div><div class="lp-step-name">진단</div><div class="lp-step-desc">AI 대시보드 및 유사 사례 매칭을 통한 고장 원인 즉각 판별</div></div>
+        <div class="lp-step-arr">→</div>
+        <div class="lp-step"><div class="lp-step-top"><div class="lp-step-n">03</div><div class="lp-step-ico">🔧</div></div><div class="lp-step-name">수리</div><div class="lp-step-desc">디지털 작업 절차서에 따른 부품 교체 및 기술 조치 수행</div></div>
+        <div class="lp-step-arr">→</div>
+        <div class="lp-step"><div class="lp-step-top"><div class="lp-step-n">04</div><div class="lp-step-ico">✅</div></div><div class="lp-step-name">검수</div><div class="lp-step-desc">디지털 체크리스트 기반 품질 보증, 재불량 원천 차단</div></div>
+        <div class="lp-step-arr">→</div>
+        <div class="lp-step"><div class="lp-step-top"><div class="lp-step-n">05</div><div class="lp-step-ico">📦</div></div><div class="lp-step-name">출고</div><div class="lp-step-desc">재발 방지 사용 설명 제공 및 최종 인도</div></div>
+      </div>
+      <div class="lp-highlight" style="margin-top:12px;">
+        <strong>AI 병목 진단:</strong> 특정 단계(부품 수급 지연 등)에서 발생하는 병목을 실시간 포착하여 즉각적인 인력 재배치와 프로세스 조정으로 전체 서비스 처리 속도를 최대화합니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- P3: AI 솔루션 -->
+  <div class="lp">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">SECTION 03</div>
+      <div class="lp-sidebar-logo">J2L<br>FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-pnum">03</div>
+    </div>
+    <div class="lp-main">
+      <div class="lp-eyebrow">// AI DASHBOARD &amp; INTELLIGENCE</div>
+      <div class="lp-title">AI 기반 진단 솔루션</div>
+      <div class="lp-divider"></div>
+      <div class="lp-body">데이터 시각화는 엔지니어의 주관적 판단 오류를 배제하고, 객관적 증거에 기반한 신속한 의사결정을 지원합니다.</div>
+      <div class="lp-cols4" style="margin-bottom:12px;">
+        <div class="lp-mini-card"><div class="lp-mini-ico">📊</div><div class="lp-mini-title">품질 추이 시각화</div><div class="lp-mini-desc">고장 트렌드 히트맵 분석. 오진단율 감소 및 부품 소요 최적화.</div><div class="lp-mini-tag">HEATMAP</div></div>
+        <div class="lp-mini-card"><div class="lp-mini-ico">🔄</div><div class="lp-mini-title">유사 사례 매칭</div><div class="lp-mini-desc">과거 수리 성공 사례 AI 즉시 제안. 숙련도 무관 진단 단축.</div><div class="lp-mini-tag">AI MATCH</div></div>
+        <div class="lp-mini-card"><div class="lp-mini-ico">📈</div><div class="lp-mini-title">실시간 모니터링</div><div class="lp-mini-desc">반복 결함 즉각 확인. 클레임 대응 데이터 근거 제공.</div><div class="lp-mini-tag">REAL-TIME</div></div>
+        <div class="lp-mini-card"><div class="lp-mini-ico">⚙️</div><div class="lp-mini-title">병목 실시간 감시</div><div class="lp-mini-desc">Latency 자동 포착. 인력 재배치 및 프로세스 즉각 조정.</div><div class="lp-mini-tag">LATENCY</div></div>
+      </div>
+      <div class="lp-table">
+        <div class="lp-table-head"><div>구분</div><div>AI 데이터 활용 방안</div><div>핵심 성과 지표 (KPI)</div></div>
+        <div class="lp-table-row"><div><span class="lp-tag">진단 고도화</span></div><div>고장 빈도 및 유형 히트맵(Heatmap) 분석</div><div>오진단율 감소 및 부품 소요 최적화</div></div>
+        <div class="lp-table-row"><div><span class="lp-tag">숙련도 상향</span></div><div>고난도 수리 사례 DB 및 디지털 가이드 공유</div><div>초보 엔지니어 리드타임 30% 이상 단축</div></div>
+        <div class="lp-table-row"><div><span class="lp-tag">클레임 대응</span></div><div>데이터 기반 고장 원인 소명 리포트 활용</div><div>고객 만족도(CSAT) 및 신뢰도 향상</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4: 품질 관리 -->
+  <div class="lp">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">SECTION 04</div>
+      <div class="lp-sidebar-logo">J2L<br>FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-pnum">04</div>
+    </div>
+    <div class="lp-main">
+      <div class="lp-eyebrow">// ROOT CAUSE ANALYSIS</div>
+      <div class="lp-title">재불량 방지 &amp; 품질 일관성 확보</div>
+      <div class="lp-divider"></div>
+      <div class="lp-body"><strong>First Time Fix(FTF)</strong> 역량 강화로 수리 실패 비용(Rework Cost)을 원천 제거합니다. 3대 Pillar 기반 근본 원인 분석(RCA) 체계로 불량 원인을 정밀하게 구분 관리합니다.</div>
+      <div class="lp-cols3" style="margin-top:14px; margin-bottom:14px;">
+        <div class="lp-rca-card"><div class="lp-rca-num">01</div><div class="lp-rca-title">부품 결함 분석</div><div class="lp-rca-desc">부품 자체의 설계·제조 이슈를 정밀 판별합니다. 원청사 설계 개선 요청을 위한 객관적 데이터 근거를 확보합니다.</div></div>
+        <div class="lp-rca-card"><div class="lp-rca-num">02</div><div class="lp-rca-title">수리 방식 오류 분석</div><div class="lp-rca-desc">작업 절차 미준수 및 기술적 오판을 분석합니다. 디지털 체크리스트로 휴먼 에러를 원천 예방하는 시스템을 적용합니다.</div></div>
+        <div class="lp-rca-card"><div class="lp-rca-num">03</div><div class="lp-rca-title">사용자 환경 판별</div><div class="lp-rca-desc">고객의 오사용이나 가혹한 사용 환경 여부를 판별합니다. 불필요한 재작업 방지와 고객 교육 근거로 활용합니다.</div></div>
+      </div>
+      <div class="lp-highlight">
+        <strong>가치 사슬 환류(Feedback) 루프</strong> — 현장 반복 불량 데이터를 원청사 설계·품질 부서로 즉각 피드백하여 제품의 근본적인 설계 개선을 유도합니다. J2L FLOW의 '전략적 데이터 파트너' 위상을 공고히 합니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- P5: KPI 목표 -->
+  <div class="lp">
+    <div class="lp-sidebar">
+      <div class="lp-sidebar-tag">SECTION 05</div>
+      <div class="lp-sidebar-logo">J2L<br>FLOW</div>
+      <div class="lp-sidebar-bar"></div>
+      <div class="lp-pnum">05</div>
+    </div>
+    <div class="lp-main">
+      <div class="lp-eyebrow">// TARGET KPI</div>
+      <div class="lp-title">4대 핵심 성과 목표</div>
+      <div class="lp-divider"></div>
+      <div class="lp-body">데이터 기반 운영 혁신을 통해 달성할 구체적인 비즈니스 성과 목표입니다. 엔지니어의 전문 기술 역량에 AI의 강력한 분석력을 결합하여 하이테크 서비스 솔루션 기업으로 거듭납니다.</div>
+      <div class="lp-cols4" style="margin-top:12px; margin-bottom:16px;">
+        <div class="lp-kpi-card"><div class="lp-kpi-n">01</div><div class="lp-kpi-title">재불량률 최소화</div><div class="lp-kpi-desc">RCA 체계 및 디지털 체크리스트로 품질 완결성 확보. Rework Cost 제거.</div></div>
+        <div class="lp-kpi-card"><div class="lp-kpi-n">02</div><div class="lp-kpi-title">리드타임 단축</div><div class="lp-kpi-desc">병목 제거 및 자재 예측 할당으로 운영 가속화. 부품 대기 시간 제로화.</div></div>
+        <div class="lp-kpi-card"><div class="lp-kpi-n">03</div><div class="lp-kpi-title">고객 만족도 제고</div><div class="lp-kpi-desc">투명한 고장 설명 및 재발 방지 교육으로 브랜드 신뢰도 향상.</div></div>
+        <div class="lp-kpi-card"><div class="lp-kpi-n">04</div><div class="lp-kpi-title">운영 원가 절감</div><div class="lp-kpi-desc">재작업·불필요 부품 교체 방지. 인건비·물류비 통합 원가 분석.</div></div>
+      </div>
+      <div class="lp-closing">
+        <div class="lp-closing-left">
+          <div class="lp-closing-logo">J2L FLOW</div>
+          <div class="lp-closing-sub">AI-Powered Appliance Service Solution</div>
+        </div>
+        <div class="lp-closing-right">
+          <div class="lp-closing-line">드롱기켄우드코리아 · CUCKOO 공인 서비스 파트너</div>
+          <div class="lp-closing-line">📧  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1b7129777d77746c442a5b757a6d7e6935787476">[email&#160;protected]</a></div>
+          <div class="lp-closing-line" style="opacity:0.4; font-size:7.5px;">© 2025 J2L FLOW. All rights reserved.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /#pdf-source -->
+
+<!-- PDF 전용 스타일 (Landscape A4: 297mm x 210mm) -->
+<style id="pdf-styles">
+#pdf-source * { box-sizing: border-box; }
+.lp {
+  width: 297mm; height: 210mm;
+  display: flex; flex-direction: row;
+  background: #fff; overflow: hidden;
+  page-break-after: always;
+}
+.lp-sidebar {
+  width: 58mm; background: #0a0e1a;
+  display: flex; flex-direction: column;
+  padding: 14mm 10mm 10mm; flex-shrink: 0; position: relative;
+}
+.lp-sidebar-tag {
+  font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#00d4ff;
+  letter-spacing:2px; border:1px solid rgba(0,212,255,0.3);
+  padding:3px 7px; margin-bottom:14px; display:inline-block;
+}
+.lp-sidebar-logo {
+  font-family:'Bebas Neue',sans-serif; font-size:24px;
+  line-height:1.05; letter-spacing:3px;
+  background:linear-gradient(135deg,#00d4ff,#0057ff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:10px;
+}
+.lp-sidebar-bar { width:30px; height:2px; background:linear-gradient(90deg,#00d4ff,#0057ff); margin-bottom:10px; }
+.lp-sidebar-sub { font-size:7.5px; color:rgba(255,255,255,0.5); line-height:1.6; }
+.lp-sidebar-clients { font-size:7px; color:rgba(255,255,255,0.3); line-height:1.7; margin-top:8px; }
+.lp-sidebar-year { font-family:'JetBrains Mono',monospace; font-size:7.5px; color:rgba(255,255,255,0.2); margin-top:auto; }
+.lp-pnum {
+  font-family:'Bebas Neue',sans-serif; font-size:55px; line-height:1;
+  color:rgba(255,255,255,0.05); position:absolute; bottom:6mm; right:5mm; letter-spacing:2px;
+}
+.lp-main { flex:1; padding:12mm 12mm 10mm; overflow:hidden; display:flex; flex-direction:column; }
+.lp-eyebrow { font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#0099cc; letter-spacing:2.5px; margin-bottom:4px; }
+.lp-title { font-family:'Bebas Neue',sans-serif; font-size:25px; color:#0a0e1a; letter-spacing:1.5px; line-height:1.05; margin-bottom:4px; }
+.lp-divider { height:2px; background:linear-gradient(90deg,#0057ff,#00d4ff,transparent); margin-bottom:8px; }
+.lp-body { font-size:8.5px; color:#445; line-height:1.75; margin-bottom:8px; }
+/* 표지 */
+.lp-cover .lp-sidebar { width:72mm; justify-content:flex-end; padding-bottom:14mm; }
+.lp-cover-main { justify-content:center; }
+.lp-cover-eyebrow { font-family:'JetBrains Mono',monospace; font-size:7px; color:#0099cc; letter-spacing:2px; margin-bottom:8px; }
+.lp-cover-title { font-family:'Bebas Neue',sans-serif; font-size:38px; line-height:1.05; color:#0a0e1a; letter-spacing:2px; margin-bottom:12px; }
+.lp-cover-desc { font-size:9px; color:#556; line-height:1.8; margin-bottom:20px; }
+.lp-cover-kpis { display:flex; gap:16px; }
+.lp-cover-kpi { border-left:2px solid #0057ff; padding-left:10px; display:flex; flex-direction:column; }
+.lp-kv { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#0057ff; line-height:1; }
+.lp-kl { font-size:7px; color:#889; margin-top:2px; }
+/* 박스 */
+.lp-cols2 { display:flex; gap:10px; }
+.lp-box { flex:1; padding:12px 14px; }
+.lp-box-dark { background:#0a0e1a; }
+.lp-box-blue { background:linear-gradient(135deg,#001a4d,#00274d); border:1px solid #0057ff; }
+.lp-box-tag { font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:1px; margin-bottom:5px; }
+.lp-box-title { font-size:10px; font-weight:700; color:#fff; margin-bottom:4px; }
+.lp-box-desc { font-size:8px; color:rgba(255,255,255,0.55); line-height:1.65; }
+.lp-highlight { background:#eef6ff; border-left:3px solid #0057ff; padding:8px 12px; font-size:8.5px; color:#223; line-height:1.7; margin-top:auto; }
+/* 스텝 */
+.lp-steps { display:flex; align-items:flex-start; gap:4px; flex:1; }
+.lp-step { flex:1; background:#f7f9fd; border:1px solid #dde2ee; padding:9px 8px; }
+.lp-step-top { display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+.lp-step-n { font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#00b4d8; }
+.lp-step-ico { font-size:16px; }
+.lp-step-name { font-size:9.5px; font-weight:700; color:#1a1a2e; margin-bottom:3px; }
+.lp-step-desc { font-size:7px; color:#667; line-height:1.55; }
+.lp-step-arr { color:#00b4d8; font-size:14px; padding-top:20px; flex-shrink:0; }
+/* 4열 */
+.lp-cols4 { display:flex; gap:8px; }
+.lp-mini-card { flex:1; background:#f7f9fd; border:1px solid #dde2ee; border-top:2px solid #0057ff; padding:9px; }
+.lp-mini-ico { font-size:15px; margin-bottom:4px; }
+.lp-mini-title { font-size:8.5px; font-weight:700; color:#1a1a2e; margin-bottom:3px; }
+.lp-mini-desc { font-size:7px; color:#667; line-height:1.6; margin-bottom:5px; }
+.lp-mini-tag { font-family:'JetBrains Mono',monospace; font-size:6px; color:#0057ff; border:1px solid #c0d4f0; padding:1px 5px; display:inline-block; }
+/* 테이블 */
+.lp-table { border:1px solid #dde2ee; font-size:8px; }
+.lp-table-head { display:flex; background:#0a0e1a; color:#fff; font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.8px; }
+.lp-table-head > div { flex:1; padding:6px 10px; border-right:1px solid #1e2840; }
+.lp-table-row { display:flex; border-top:1px solid #dde2ee; }
+.lp-table-row > div { flex:1; padding:6px 10px; color:#445; border-right:1px solid #dde2ee; line-height:1.5; }
+.lp-tag { background:#e8f4ff; color:#0057ff; font-family:'JetBrains Mono',monospace; font-size:6.5px; padding:1px 5px; }
+/* 3열 RCA */
+.lp-cols3 { display:flex; gap:10px; }
+.lp-rca-card { flex:1; border:1px solid #dde2ee; padding:11px 11px; }
+.lp-rca-num { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#d8e4f0; line-height:1; margin-bottom:4px; }
+.lp-rca-title { font-size:9px; font-weight:700; color:#1a1a2e; margin-bottom:4px; }
+.lp-rca-desc { font-size:7.5px; color:#556; line-height:1.65; }
+/* KPI */
+.lp-kpi-card { flex:1; background:#f7f9fd; border:1px solid #dde2ee; border-top:3px solid #0057ff; padding:11px 9px; }
+.lp-kpi-n { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#0057ff; line-height:1; margin-bottom:3px; }
+.lp-kpi-title { font-size:8.5px; font-weight:700; color:#1a1a2e; margin-bottom:3px; }
+.lp-kpi-desc { font-size:7px; color:#667; line-height:1.6; }
+/* 클로징 */
+.lp-closing { background:#0a0e1a; display:flex; align-items:center; justify-content:space-between; padding:11px 15px; margin-top:auto; }
+.lp-closing-logo { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:3px; background:linear-gradient(135deg,#00d4ff,#0057ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
+.lp-closing-sub { font-size:7px; color:rgba(255,255,255,0.4); }
+.lp-closing-line { font-size:7.5px; color:rgba(255,255,255,0.55); margin-bottom:3px; font-family:'JetBrains Mono',monospace; }
+</style>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  document.getElementById('download-btn').addEventListener('click', function() {
+    const btn = this;
+    btn.textContent = '⏳ PDF 생성 중...';
+    btn.disabled = true;
+    const el = document.getElementById('pdf-source');
+    el.style.display = 'block';
+    const opt = {
+      margin: 0,
+      filename: 'J2L_FLOW_솔루션소개서.pdf',
+      image: { type: 'jpeg', quality: 0.97 },
+      html2canvas: { scale: 2, useCORS: true, logging: false, allowTaint: true, windowWidth: 1123 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+      pagebreak: { mode: ['css','legacy'], after: '.lp' }
+    };
+    html2pdf().set(opt).from(el).save()
+      .then(() => 
