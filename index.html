@@ -93,7 +93,7 @@
   .hero-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(3.5rem, 7vw, 6.5rem);
-    line-height: 0.95;
+    line-height: 1.15;
     letter-spacing: 0.05em;
     margin-bottom: 1.5rem;
     animation: fadeUp 0.8s 0.1s ease both;
@@ -345,6 +345,16 @@
     transition: transform 0.4s;
   }
   .feature-card:hover::after { transform: scaleX(1); }
+  .feature-card[data-modal] { cursor: pointer; }
+  .feature-card[data-modal]:hover .feature-title { color: var(--accent); }
+  .feature-card .click-hint {
+    position: absolute; bottom: 1.2rem; right: 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; color: var(--accent3);
+    opacity: 0; transition: opacity 0.3s;
+    letter-spacing: 0.08em;
+  }
+  .feature-card[data-modal]:hover .click-hint { opacity: 1; }
   .feature-icon {
     font-size: 2rem; margin-bottom: 1.2rem;
     display: block;
@@ -352,6 +362,7 @@
   .feature-title {
     font-size: 1.15rem; font-weight: 700;
     margin-bottom: 0.8rem; letter-spacing: 0.03em;
+    transition: color 0.3s;
   }
   .feature-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
   .feature-badge {
@@ -363,6 +374,149 @@
     margin-top: 1rem;
     letter-spacing: 0.1em;
   }
+
+  /* ── AI 모달 ── */
+  .ai-modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(4,8,20,0.88); backdrop-filter: blur(6px);
+    justify-content: center; align-items: center; padding: 2rem;
+  }
+  .ai-modal-overlay.open { display: flex; }
+  .ai-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    width: 100%; max-width: 860px;
+    max-height: 90vh; overflow-y: auto;
+    position: relative;
+    animation: fadeUp 0.25s ease both;
+  }
+  .ai-modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.4rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .ai-modal-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--accent3);
+    border: 1px solid rgba(0,255,157,0.3);
+    padding: 0.25rem 0.7rem; letter-spacing: 0.1em;
+  }
+  .ai-modal-title {
+    font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem;
+    color: var(--text);
+  }
+  .ai-modal-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 1.6rem; cursor: pointer; line-height: 1;
+    transition: color 0.2s;
+  }
+  .ai-modal-close:hover { color: var(--text); }
+  .ai-modal-body { padding: 2rem; }
+
+  /* 히트맵 */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(6, 1fr);
+    gap: 3px; margin-bottom: 1.5rem;
+  }
+  .hm-label {
+    font-size: 0.7rem; color: var(--muted);
+    display: flex; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .hm-cell {
+    height: 38px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.9);
+    cursor: default; transition: transform 0.15s;
+    position: relative;
+  }
+  .hm-cell:hover { transform: scale(1.08); z-index: 2; }
+  .hm-cell[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: #1a2540; border: 1px solid var(--border);
+    padding: 0.3rem 0.6rem; font-size: 0.65rem; white-space: nowrap;
+    color: var(--text); pointer-events: none; z-index: 10;
+  }
+  .hm-legend { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .hm-legend-bar { width: 120px; height: 10px; border-radius: 3px;
+    background: linear-gradient(90deg, rgba(0,87,255,0.2), rgba(0,87,255,1)); }
+
+  /* 유사 사례 매칭 */
+  .match-list { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+  .match-item {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 1rem 1.2rem; border-radius: 4px;
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: center; gap: 1rem;
+  }
+  .match-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--accent3);
+  }
+  .match-score span { font-size: 0.65rem; color: var(--muted); display: block; }
+  .match-info-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .match-info-desc { font-size: 0.75rem; color: var(--muted); }
+  .match-parts { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-end; }
+  .match-part {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    border: 1px solid rgba(0,212,255,0.4); color: var(--accent);
+    padding: 0.15rem 0.5rem; border-radius: 2px;
+  }
+
+  /* 실시간 이력 타임라인 */
+  .timeline { position: relative; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 1rem; padding-left: 0.5rem; }
+  .tl-dot {
+    position: absolute; left: -1.2rem; top: 4px;
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 2px solid;
+  }
+  .tl-dot.ok { background: rgba(0,255,157,0.2); border-color: var(--accent3); }
+  .tl-dot.warn { background: rgba(255,170,0,0.2); border-color: #ffaa00; }
+  .tl-dot.err { background: rgba(255,70,70,0.2); border-color: #ff4646; }
+  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+  .tl-title { font-size: 0.85rem; font-weight: 600; margin: 0.15rem 0; }
+  .tl-detail { font-size: 0.75rem; color: var(--muted); }
+
+  /* 병목 감시 바 */
+  .bottleneck-grid { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.5rem; }
+  .bn-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 0.8rem; }
+  .bn-label { font-size: 0.8rem; font-weight: 500; }
+  .bn-bar-bg { background: rgba(255,255,255,0.06); border-radius: 3px; height: 18px; overflow: hidden; }
+  .bn-bar {
+    height: 100%; border-radius: 3px;
+    display: flex; align-items: center; padding-left: 0.5rem;
+    font-size: 0.65rem; font-family: 'JetBrains Mono', monospace;
+    transition: width 1s ease;
+  }
+  .bn-val { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-align: right; }
+
+  /* 모달 하단 진단/부품 패널 */
+  .modal-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .modal-panel {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 1.2rem; border-radius: 4px;
+  }
+  .modal-panel-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--accent3); letter-spacing: 0.1em; margin-bottom: 0.8rem;
+  }
+  .modal-panel ul { list-style: none; padding: 0; margin: 0; }
+  .modal-panel ul li {
+    font-size: 0.8rem; padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; gap: 0.5rem; color: var(--text);
+  }
+  .modal-panel ul li:last-child { border-bottom: none; }
+  .modal-panel ul li::before { content: '▸'; color: var(--accent); font-size: 0.7rem; }
 
   /* ── QUALITY / RCA ── */
   #quality { background: var(--bg); }
@@ -948,29 +1102,33 @@
     객관적 증거 기반의 신속한 의사결정을 지원합니다.
   </p>
   <div class="features-grid">
-    <div class="feature-card reveal">
+    <div class="feature-card reveal" data-modal="modal-heatmap">
       <span class="feature-icon">📊</span>
       <div class="feature-title">리페어 품질 추이 시각화</div>
       <div class="feature-desc">고장 발생 트렌드를 실시간 분석하여 유형별 선제적 파악이 가능합니다. 히트맵 분석으로 오진단율을 감소시키고 부품 소요를 최적화합니다.</div>
       <span class="feature-badge">HEATMAP ANALYSIS</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="feature-card reveal">
+    <div class="feature-card reveal" data-modal="modal-matching">
       <span class="feature-icon">🔄</span>
       <div class="feature-title">유사 사례 매칭 &amp; 진단 가속화</div>
       <div class="feature-desc">현재 증상과 가장 일치하는 과거 수리 성공 사례를 AI가 즉시 제안합니다. 엔지니어 숙련도와 무관하게 진단 시간을 물리적으로 단축합니다.</div>
       <span class="feature-badge">AI MATCHING</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="feature-card reveal">
+    <div class="feature-card reveal" data-modal="modal-history">
       <span class="feature-icon">📈</span>
       <div class="feature-title">과거 이력 &amp; 실시간 모니터링</div>
       <div class="feature-desc">제품별 수리 히스토리를 대조하여 반복 결함 여부를 즉각 확인합니다. 클레임 발생 시 데이터 기반 신뢰도 높은 대응 근거를 제공합니다.</div>
       <span class="feature-badge">REAL-TIME</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="feature-card reveal">
+    <div class="feature-card reveal" data-modal="modal-bottleneck">
       <span class="feature-icon">⚙️</span>
       <div class="feature-title">병목 현상 실시간 감시</div>
       <div class="feature-desc">워크플로우 전반의 latency를 실시간 감시하여 병목 구간을 자동 포착합니다. 즉각적인 인력 재배치와 프로세스 조정으로 서비스 처리 속도를 최대화합니다.</div>
       <span class="feature-badge">LATENCY CONTROL</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
     <div class="feature-card large reveal">
       <span class="feature-icon">🤝</span>
@@ -980,6 +1138,312 @@
     </div>
   </div>
 </section>
+
+<!-- ══ AI 진단 모달 4종 ══ -->
+
+<!-- 1. 히트맵 분석 -->
+<div id="modal-heatmap" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">HEATMAP ANALYSIS</div>
+        <div class="ai-modal-title">📊 리페어 품질 추이 시각화</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">고장 유형 × 월별 발생 빈도 히트맵 — 셀에 마우스를 올리면 건수 확인</p>
+      <!-- 히트맵 -->
+      <div class="heatmap-grid">
+        <div class="hm-label"></div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">5월</div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">6월</div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">7월</div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">8월</div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">9월</div>
+        <div class="hm-label" style="justify-content:center;font-size:0.62rem;">10월</div>
+
+        <div class="hm-label">히터 불량</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.25);" data-tip="히터 불량 5월 · 8건">8</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.4);" data-tip="히터 불량 6월 · 13건">13</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.65);" data-tip="히터 불량 7월 · 21건">21</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.85);" data-tip="히터 불량 8월 · 28건">28</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.55);" data-tip="히터 불량 9월 · 18건">18</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.3);" data-tip="히터 불량 10월 · 10건">10</div>
+
+        <div class="hm-label">펌프 누수</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.5);" data-tip="펌프 누수 5월 · 16건">16</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.35);" data-tip="펌프 누수 6월 · 11건">11</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.2);" data-tip="펌프 누수 7월 · 6건">6</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.25);" data-tip="펌프 누수 8월 · 8건">8</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.45);" data-tip="펌프 누수 9월 · 14건">14</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.7);" data-tip="펌프 누수 10월 · 23건">23</div>
+
+        <div class="hm-label">PCB 오류</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.15);" data-tip="PCB 오류 5월 · 4건">4</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.2);" data-tip="PCB 오류 6월 · 6건">6</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.3);" data-tip="PCB 오류 7월 · 10건">10</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.6);" data-tip="PCB 오류 8월 · 19건">19</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.8);" data-tip="PCB 오류 9월 · 26건">26</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.95);" data-tip="PCB 오류 10월 · 31건">31</div>
+
+        <div class="hm-label">모터 소음</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.7);" data-tip="모터 소음 5월 · 22건">22</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.55);" data-tip="모터 소음 6월 · 18건">18</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.3);" data-tip="모터 소음 7월 · 9건">9</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.15);" data-tip="모터 소음 8월 · 5건">5</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.2);" data-tip="모터 소음 9월 · 6건">6</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.25);" data-tip="모터 소음 10월 · 8건">8</div>
+
+        <div class="hm-label">오사용</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.3);" data-tip="오사용 5월 · 10건">10</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.45);" data-tip="오사용 6월 · 14건">14</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.55);" data-tip="오사용 7월 · 18건">18</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.45);" data-tip="오사용 8월 · 14건">14</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.3);" data-tip="오사용 9월 · 10건">10</div>
+        <div class="hm-cell" style="background:rgba(0,87,255,0.2);" data-tip="오사용 10월 · 6건">6</div>
+      </div>
+      <div class="hm-legend">
+        <span>낮음</span><div class="hm-legend-bar"></div><span>높음</span>
+        <span style="margin-left:1.5rem;color:#ffaa00;">⚠ PCB 오류 급증 추세 감지 — 즉시 검토 필요</span>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 주요 진단 항목</div>
+          <ul>
+            <li>히터 어셈블리 작동 여부 확인</li>
+            <li>PCB 입출력 전압 측정 (5V / 12V)</li>
+            <li>펌프 실링 누수 점검</li>
+            <li>모터 베어링 마모 청진</li>
+            <li>고객 사용 패턴 오사용 여부 확인</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 예측 소요 부품 TOP 5</div>
+          <ul>
+            <li>PCB 메인보드 (월 평균 18개)</li>
+            <li>히터 어셈블리 (월 평균 15개)</li>
+            <li>펌프 실링 키트 (월 평균 12개)</li>
+            <li>모터 유닛 (월 평균 8개)</li>
+            <li>커넥터 하네스 (월 평균 6개)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 유사 사례 매칭 -->
+<div id="modal-matching" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">AI MATCHING</div>
+        <div class="ai-modal-title">🔄 유사 사례 매칭 &amp; 진단 가속화</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">입력 증상: <strong style="color:var(--text);">"전원 켜면 3초 후 자동 꺼짐, 이상음 없음, 냉각 팬 미작동"</strong></p>
+      <p style="font-size:0.75rem;color:var(--muted);margin-bottom:1.2rem;">AI가 유사도 순으로 과거 수리 성공 사례를 즉시 제안합니다.</p>
+      <div class="match-list">
+        <div class="match-item" style="border-color:rgba(0,255,157,0.4);">
+          <div class="match-score">97%<span>유사도</span></div>
+          <div>
+            <div class="match-info-title">식기세척기 DW-H6T · 써멀 퓨즈 단선</div>
+            <div class="match-info-desc">냉각 팬 정지 → 내부 과열 → 보호 회로 트리거 패턴 일치. 수리 성공율 99%.</div>
+          </div>
+          <div class="match-parts">
+            <span class="match-part">써멀 퓨즈</span>
+            <span class="match-part">팬 모터</span>
+            <span class="match-part">커넥터</span>
+          </div>
+        </div>
+        <div class="match-item">
+          <div class="match-score">84%<span>유사도</span></div>
+          <div>
+            <div class="match-info-title">커피머신 CM-A300 · PCB 보호 회로 오동작</div>
+            <div class="match-info-desc">전원 인가 후 단시간 내 강제 종료. PCB 교체 후 정상 복귀.</div>
+          </div>
+          <div class="match-parts">
+            <span class="match-part">PCB 메인보드</span>
+            <span class="match-part">전원 IC</span>
+          </div>
+        </div>
+        <div class="match-item">
+          <div class="match-score">71%<span>유사도</span></div>
+          <div>
+            <div class="match-info-title">전자레인지 MWR-K800 · 마그네트론 과부하 차단</div>
+            <div class="match-info-desc">고출력 작동 후 내부 온도 임계치 초과 — 냉각 계통 점검 병행 필요.</div>
+          </div>
+          <div class="match-parts">
+            <span class="match-part">마그네트론</span>
+            <span class="match-part">써멀 센서</span>
+            <span class="match-part">팬 어셈블리</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// AI 추천 진단 순서</div>
+          <ul>
+            <li>써멀 퓨즈 연속성 테스트 (멀티미터)</li>
+            <li>냉각 팬 단독 구동 테스트</li>
+            <li>PCB 전원 공급 전압 측정</li>
+            <li>내부 온도 센서 저항값 확인</li>
+            <li>마그네트론 절연 저항 측정</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 예상 필요 부품</div>
+          <ul>
+            <li>써멀 퓨즈 (1차 소요 가능성 78%)</li>
+            <li>팬 모터 어셈블리 (62%)</li>
+            <li>PCB 메인보드 (41%)</li>
+            <li>온도 센서 (35%)</li>
+            <li>전원 커넥터 세트 (22%)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 과거 이력 & 실시간 모니터링 -->
+<div id="modal-history" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">REAL-TIME MONITORING</div>
+        <div class="ai-modal-title">📈 과거 이력 &amp; 실시간 모니터링</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.3rem;">제품 S/N: <strong style="color:var(--accent);font-family:'JetBrains Mono',monospace;">DWH-2024-08741</strong> · 식기세척기 DW-H6T</p>
+      <p style="font-size:0.75rem;color:#ffaa00;margin-bottom:1.2rem;">⚠ 반복 결함 감지 — 동일 부품(펌프 모터) 3회 교체 이력</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot err"></div>
+          <div class="tl-date">2026-10-14 · 엔지니어: 김민준</div>
+          <div class="tl-title">🔴 3차 입고 — 펌프 모터 재불량</div>
+          <div class="tl-detail">동일 증상 재발 (누수+소음). PCB 연동 로직 이상 의심. 원청 에스컬레이션 권고.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot warn"></div>
+          <div class="tl-date">2026-08-29 · 엔지니어: 이수현</div>
+          <div class="tl-title">🟡 2차 입고 — 펌프 모터 교체 (재발)</div>
+          <div class="tl-detail">1차 교체 67일 후 동일 증상 재발. 부품 품질 결함 가능성 플래그.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot warn"></div>
+          <div class="tl-date">2026-06-23 · 엔지니어: 박정호</div>
+          <div class="tl-title">🟡 1차 수리 — 펌프 모터 교체</div>
+          <div class="tl-detail">누수+이상음 접수. 펌프 모터 단품 교체 후 출고. 리드타임 1.5일.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot ok"></div>
+          <div class="tl-date">2025-11-10 · 고객 구매</div>
+          <div class="tl-title">✅ 신품 출하</div>
+          <div class="tl-detail">정상 출하. 초기 이상 없음.</div>
+        </div>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 반복 결함 진단 항목</div>
+          <ul>
+            <li>펌프 모터 로터 마모 측정</li>
+            <li>PCB 펌프 제어 신호 파형 분석</li>
+            <li>실링 재질 내구성 재확인</li>
+            <li>진동 패턴 FFT 스펙트럼 분석</li>
+            <li>설치 환경 수압·온도 이력 확인</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 권고 교체 부품</div>
+          <ul>
+            <li>펌프 모터 어셈블리 (개선 버전)</li>
+            <li>PCB 메인보드 (제어 로직 검토)</li>
+            <li>펌프 실링 키트 (고내구 규격)</li>
+            <li>진동 댐퍼 패드</li>
+            <li>배수 호스 클램프 세트</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 병목 현상 실시간 감시 -->
+<div id="modal-bottleneck" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">LATENCY CONTROL</div>
+        <div class="ai-modal-title">⚙️ 병목 현상 실시간 감시</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">오늘 09:00 기준 · 전체 처리 대기 <strong style="color:var(--text);">47건</strong> · 평균 리드타임 <strong style="color:var(--accent3);">1.8일</strong> (목표 2.0일)</p>
+      <div class="bottleneck-grid">
+        <div class="bn-row">
+          <div class="bn-label">① 접수</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:22%;background:rgba(0,255,157,0.6);">4.2h avg</div></div>
+          <div class="bn-val" style="color:var(--accent3);">정상</div>
+        </div>
+        <div class="bn-row">
+          <div class="bn-label">② 진단</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:38%;background:rgba(0,212,255,0.6);">7.1h avg</div></div>
+          <div class="bn-val" style="color:var(--accent);">주의</div>
+        </div>
+        <div class="bn-row">
+          <div class="bn-label" style="color:#ffaa00;">③ 자재대기</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:78%;background:rgba(255,140,0,0.7);">14.6h avg</div></div>
+          <div class="bn-val" style="color:#ffaa00;">⚠ 병목</div>
+        </div>
+        <div class="bn-row">
+          <div class="bn-label">④ 수리</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:30%;background:rgba(0,212,255,0.6);">5.8h avg</div></div>
+          <div class="bn-val" style="color:var(--accent);">정상</div>
+        </div>
+        <div class="bn-row">
+          <div class="bn-label">⑤ 검수</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:15%;background:rgba(0,255,157,0.6);">2.9h avg</div></div>
+          <div class="bn-val" style="color:var(--accent3);">정상</div>
+        </div>
+        <div class="bn-row">
+          <div class="bn-label">⑥ 출고</div>
+          <div class="bn-bar-bg"><div class="bn-bar" style="width:10%;background:rgba(0,255,157,0.6);">1.8h avg</div></div>
+          <div class="bn-val" style="color:var(--accent3);">정상</div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem;color:#ffaa00;margin-bottom:1.2rem;">🚨 AI 분석: <strong>③ 자재대기</strong> 구간이 전체 리드타임의 41%를 차지 — PCB 메인보드·써멀 퓨즈 재고 부족 원인</p>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// AI 권고 조치</div>
+          <ul>
+            <li>PCB 메인보드 긴급 발주 (부족량 23개)</li>
+            <li>써멀 퓨즈 안전 재고 기준 상향</li>
+            <li>대기 중 8건 진단 단계로 선행 이동</li>
+            <li>외주 파트너 임시 자재 지원 요청</li>
+            <li>리드타임 초과 건 고객 사전 안내</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 재고 부족 부품 현황</div>
+          <ul>
+            <li>PCB 메인보드 — 재고 2개 / 소요 25개</li>
+            <li>써멀 퓨즈 (F4A) — 재고 0개 / 소요 11개</li>
+            <li>팬 모터 어셈블리 — 재고 3개 / 소요 9개</li>
+            <li>펌프 실링 키트 — 재고 5개 / 소요 7개</li>
+            <li>전원 커넥터 세트 — 재고 8개 / 소요 6개</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- QUALITY -->
 <section id="quality">
@@ -1833,6 +2297,44 @@
         alert('PDF 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
       });
   });
+</script>
+
+<script>
+/* ── AI 진단 모달 인터랙션 ── */
+(function() {
+  // 카드 클릭 → 모달 열기
+  document.querySelectorAll('.feature-card[data-modal]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var modalId = card.getAttribute('data-modal');
+      var overlay = document.getElementById(modalId);
+      if (overlay) {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  // 닫기 버튼 또는 오버레이 배경 클릭 → 닫기
+  document.querySelectorAll('.ai-modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeModal(overlay);
+    });
+    var closeBtn = overlay.querySelector('[data-close]');
+    if (closeBtn) closeBtn.addEventListener('click', function() { closeModal(overlay); });
+  });
+
+  // ESC 키 닫기
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.ai-modal-overlay.open').forEach(closeModal);
+    }
+  });
+
+  function closeModal(overlay) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+})();
 </script>
 </body>
 </html>
