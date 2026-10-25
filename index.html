@@ -1599,34 +1599,352 @@
   <h2 class="section-title">데이터 기반 스마트 운영</h2>
   <p class="section-desc">AI와 데이터를 활용하여 선제적인 이슈 대응 체계를 구축합니다.</p>
   <div class="so-grid">
-    <div class="so-card reveal">
+    <div class="so-card reveal" data-modal="modal-analytics">
       <div class="so-icon">📊</div>
       <div class="so-title">지능형 대시보드 &amp; AI 리포트</div>
       <div class="so-desc">운영 결과를 데이터화하여 심층 분석 리포트를 정기적으로 제공합니다. 경영 의사결정에 바로 활용 가능한 형태로 납품합니다.</div>
       <span class="so-badge">ANALYTICS</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="so-card reveal">
+    <div class="so-card reveal" data-modal="modal-alert">
       <div class="so-icon">🚨</div>
       <div class="so-title">실시간 이슈 탐지 및 알람</div>
       <div class="so-desc"><span class="so-highlight">S급·A급</span> 사용량 급변이나 <span class="so-highlight">C급·D급</span> 품절 자재에 대해 즉각 대응하여 고객 불편을 최소화합니다.</div>
       <span class="so-badge">REAL-TIME ALERT</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="so-card reveal">
+    <div class="so-card reveal" data-modal="modal-trend">
       <div class="so-icon">📈</div>
       <div class="so-title">트렌드 분석 정보 공유</div>
       <div class="so-desc">자재 사용 트렌드를 분석하여 원청사의 의사결정에 필요한 핵심 정보를 지원합니다. 선제적 수급 계획이 가능해집니다.</div>
       <span class="so-badge">TREND INSIGHT</span>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
-    <div class="so-card so-card-wide reveal">
+    <div class="so-card so-card-wide reveal" data-modal="modal-shopping">
       <div class="so-icon">🛒</div>
       <div>
         <div class="so-title">확장된 서비스 지원 범위 — 쇼핑몰 운영 지원</div>
         <div class="so-desc">창고 운영을 넘어 비즈니스 전반의 효율성을 극대화합니다. 과거 운영 경험을 토대로 자재 관련 쇼핑몰 및 소모품 판매 업무까지 유연하게 지원 가능합니다.</div>
         <span class="so-badge">EXTENDED SERVICE</span>
       </div>
+      <span class="click-hint">▶ 예시 보기</span>
     </div>
   </div>
 </section>
+
+<!-- ══ 스마트 운영 모달 4종 ══ -->
+
+<!-- 1. 지능형 대시보드 & AI 리포트 -->
+<div id="modal-analytics" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">ANALYTICS</div>
+        <div class="ai-modal-title">📊 지능형 대시보드 &amp; AI 리포트</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">월간 자재 운영 요약 리포트 예시 · 2026년 10월 기준</p>
+      <!-- KPI 타일 4개 -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:1.5rem;">
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem;text-align:center;border-radius:4px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--accent3);">98.4%</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;">출고 정확도</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem;text-align:center;border-radius:4px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--accent);">1.4일</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;">평균 출고 리드타임</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem;text-align:center;border-radius:4px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--accent3);">2,847</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;">월 처리 건수</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem;text-align:center;border-radius:4px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:#ffaa00;">3건</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;">오출고 발생</div>
+        </div>
+      </div>
+      <!-- 주간 출고 바 차트 -->
+      <p style="font-size:0.72rem;color:var(--muted);margin-bottom:0.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;">// 주간 출고 건수 추이</p>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:0.5rem;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="width:100%;background:rgba(0,87,255,0.6);border-radius:3px 3px 0 0;" data-tip="1주차 · 651건" title="1주차 651건" class="hm-cell" style="height:52px;border-radius:3px 3px 0 0;"></div>
+          <span style="font-size:0.62rem;color:var(--muted);">1주</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="width:100%;height:64px;background:rgba(0,87,255,0.75);border-radius:3px 3px 0 0;"></div>
+          <span style="font-size:0.62rem;color:var(--muted);">2주</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="width:100%;height:80px;background:rgba(0,212,255,0.85);border-radius:3px 3px 0 0;"></div>
+          <span style="font-size:0.62rem;color:var(--muted);">3주</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="width:100%;height:55px;background:rgba(0,87,255,0.6);border-radius:3px 3px 0 0;"></div>
+          <span style="font-size:0.62rem;color:var(--muted);">4주</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-bottom:1.5rem;font-family:'JetBrains Mono',monospace;">
+        <span>651건</span><span>741건</span><span>876건</span><span>579건</span>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 리포트 주요 항목</div>
+          <ul>
+            <li>고객사별 자재 사용량 분석</li>
+            <li>S·A급 고빈도 자재 소비 추이</li>
+            <li>출고 오류 원인 분류 및 재발 방지</li>
+            <li>재고 회전율 및 적정 재고 권고</li>
+            <li>월간 비용 절감 효과 정량화</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 납품 형태</div>
+          <ul>
+            <li>PDF 월간 리포트 (매월 1일 발행)</li>
+            <li>Excel 원시 데이터 함께 제공</li>
+            <li>대시보드 URL 공유 (실시간 접근)</li>
+            <li>분기별 대면 브리핑 지원</li>
+            <li>요청 시 항목 커스터마이징 가능</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 실시간 이슈 탐지 및 알람 -->
+<div id="modal-alert" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">REAL-TIME ALERT</div>
+        <div class="ai-modal-title">🚨 실시간 이슈 탐지 및 알람</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">현재 활성 알람 현황 · 오늘 09:12 기준</p>
+      <!-- 알람 리스트 -->
+      <div style="display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;">
+        <div style="background:rgba(255,70,70,0.08);border:1px solid rgba(255,70,70,0.35);padding:1rem 1.2rem;border-radius:4px;display:flex;align-items:flex-start;gap:1rem;">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔴</div>
+          <div style="flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.25rem;">긴급 · S급 품절 임박</div>
+            <div style="font-size:0.78rem;color:var(--muted);">펌프 실링 키트 (PN: WD-S4112) — 재고 2개 잔여, 예상 소진 <strong style="color:#ff4646;">D+1 이내</strong></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#ff4646;white-space:nowrap;">CRITICAL</div>
+        </div>
+        <div style="background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.35);padding:1rem 1.2rem;border-radius:4px;display:flex;align-items:flex-start;gap:1rem;">
+          <div style="font-size:1.2rem;flex-shrink:0;">🟠</div>
+          <div style="flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.25rem;">주의 · A급 사용량 급증</div>
+            <div style="font-size:0.78rem;color:var(--muted);">PCB 메인보드 (PN: MB-C301) — 주간 사용량 전주 대비 <strong style="color:#ffaa00;">+240%</strong> 급증. 추가 발주 검토 필요.</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#ffaa00;white-space:nowrap;">WARNING</div>
+        </div>
+        <div style="background:rgba(255,170,0,0.06);border:1px solid rgba(255,170,0,0.25);padding:1rem 1.2rem;border-radius:4px;display:flex;align-items:flex-start;gap:1rem;">
+          <div style="font-size:1.2rem;flex-shrink:0;">🟡</div>
+          <div style="flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.25rem;">주의 · C급 품절</div>
+            <div style="font-size:0.78rem;color:var(--muted);">드레인 필터 세트 (PN: DF-2240) — 재고 0개. 대체 자재 <strong style="color:#ffaa00;">DF-2241</strong> 적용 가능.</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#ffaa00;white-space:nowrap;">WARNING</div>
+        </div>
+        <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);padding:1rem 1.2rem;border-radius:4px;display:flex;align-items:flex-start;gap:1rem;">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔵</div>
+          <div style="flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.25rem;">정보 · 입고 예정 확인</div>
+            <div style="font-size:0.78rem;color:var(--muted);">히터 어셈블리 (PN: HT-7720) 50개 · <strong style="color:var(--accent);">D+2 입고 예정</strong>. 우선 배정 대상 7건 사전 지정 완료.</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--accent);white-space:nowrap;">INFO</div>
+        </div>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 알람 트리거 기준</div>
+          <ul>
+            <li>S·A급 재고 ≤ 7일 소진량 → 긴급</li>
+            <li>주간 사용량 전주 대비 +150% 초과</li>
+            <li>C·D급 재고 0개 → 대체 자재 자동 제안</li>
+            <li>입고 지연 D+3 초과 → 에스컬레이션</li>
+            <li>오출고 발생 즉시 → 담당자 Push 알림</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 알람 수신 채널</div>
+          <ul>
+            <li>대시보드 실시간 배너</li>
+            <li>이메일 자동 발송 (담당자)</li>
+            <li>카카오 알림톡 (긴급 등급 한정)</li>
+            <li>일일 알람 요약 리포트 (09:00)</li>
+            <li>원청사 공유 포털 자동 반영</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 트렌드 분석 정보 공유 -->
+<div id="modal-trend" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">TREND INSIGHT</div>
+        <div class="ai-modal-title">📈 트렌드 분석 정보 공유</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">자재 사용 트렌드 분석 · Q3 2026 vs Q4 2026 (예측 포함)</p>
+      <!-- 트렌드 비교 테이블 -->
+      <div style="overflow-x:auto;margin-bottom:1.5rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:0.6rem 0.8rem;color:var(--muted);font-weight:500;font-family:'JetBrains Mono',monospace;font-size:0.65rem;">자재명</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--muted);font-weight:500;font-size:0.65rem;">Q3 사용량</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--muted);font-weight:500;font-size:0.65rem;">Q4 예측</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--muted);font-weight:500;font-size:0.65rem;">증감</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--muted);font-weight:500;font-size:0.65rem;">수급 권고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.7rem 0.8rem;font-weight:600;">PCB 메인보드</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;">214개</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--accent);">351개</td>
+              <td style="text-align:center;padding:0.7rem;color:#ff6b6b;font-weight:700;">▲ +64%</td>
+              <td style="text-align:center;padding:0.7rem;"><span style="background:rgba(255,70,70,0.15);color:#ff6b6b;font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:2px;">선제 확보</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.7rem 0.8rem;font-weight:600;">히터 어셈블리</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;">187개</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--accent);">241개</td>
+              <td style="text-align:center;padding:0.7rem;color:#ffaa00;font-weight:700;">▲ +29%</td>
+              <td style="text-align:center;padding:0.7rem;"><span style="background:rgba(255,170,0,0.15);color:#ffaa00;font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:2px;">추가 발주</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.7rem 0.8rem;font-weight:600;">펌프 실링 키트</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;">143개</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--accent3);">131개</td>
+              <td style="text-align:center;padding:0.7rem;color:var(--accent3);font-weight:700;">▼ -8%</td>
+              <td style="text-align:center;padding:0.7rem;"><span style="background:rgba(0,255,157,0.1);color:var(--accent3);font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:2px;">현행 유지</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.7rem 0.8rem;font-weight:600;">팬 모터 어셈블리</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;">98개</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--accent);">159개</td>
+              <td style="text-align:center;padding:0.7rem;color:#ff6b6b;font-weight:700;">▲ +62%</td>
+              <td style="text-align:center;padding:0.7rem;"><span style="background:rgba(255,70,70,0.15);color:#ff6b6b;font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:2px;">선제 확보</span></td>
+            </tr>
+            <tr>
+              <td style="padding:0.7rem 0.8rem;font-weight:600;">모터 유닛</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;">76개</td>
+              <td style="text-align:center;padding:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--accent3);">68개</td>
+              <td style="text-align:center;padding:0.7rem;color:var(--accent3);font-weight:700;">▼ -11%</td>
+              <td style="text-align:center;padding:0.7rem;"><span style="background:rgba(0,255,157,0.1);color:var(--accent3);font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:2px;">현행 유지</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 트렌드 분석 방법론</div>
+          <ul>
+            <li>전년 동기 대비 계절성 보정</li>
+            <li>고장 히트맵 데이터 연동 예측</li>
+            <li>신규 모델 출시 영향 반영</li>
+            <li>원청사 서비스 물량 증감 연계</li>
+            <li>이상치 자동 제거 후 회귀 분석</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 원청사 제공 인사이트</div>
+          <ul>
+            <li>분기별 자재 수급 선행 지표</li>
+            <li>반복 불량 자재 품질 개선 요청</li>
+            <li>고빈도 자재 단가 협상 근거 데이터</li>
+            <li>신규 모델 수리 부품 DB 선제 구축</li>
+            <li>재고 적정 수준 공동 설정 협의</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 쇼핑몰 운영 지원 -->
+<div id="modal-shopping" class="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div>
+        <div class="ai-modal-badge">EXTENDED SERVICE</div>
+        <div class="ai-modal-title">🛒 확장된 서비스 — 쇼핑몰 운영 지원</div>
+      </div>
+      <button class="ai-modal-close" data-close>✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;">창고 운영 경험을 기반으로 자재·소모품 판매 채널 운영까지 원스톱 지원</p>
+      <!-- 서비스 플로우 -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;margin-bottom:1.5rem;text-align:center;">
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem 0.5rem;border-radius:4px;">
+          <div style="font-size:1.4rem;margin-bottom:0.5rem;">📦</div>
+          <div style="font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">재고 관리</div>
+          <div style="font-size:0.68rem;color:var(--muted);">실물·온라인 재고 실시간 동기화</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem 0.5rem;border-radius:4px;">
+          <div style="font-size:1.4rem;margin-bottom:0.5rem;">🏷️</div>
+          <div style="font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">상품 등록</div>
+          <div style="font-size:0.68rem;color:var(--muted);">자재 DB 기반 상세페이지 자동 생성</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem 0.5rem;border-radius:4px;">
+          <div style="font-size:1.4rem;margin-bottom:0.5rem;">🚚</div>
+          <div style="font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">주문·배송</div>
+          <div style="font-size:0.68rem;color:var(--muted);">주문 접수~출고까지 창고 직결 처리</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);padding:1rem 0.5rem;border-radius:4px;">
+          <div style="font-size:1.4rem;margin-bottom:0.5rem;">📊</div>
+          <div style="font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">매출 분석</div>
+          <div style="font-size:0.68rem;color:var(--muted);">판매 현황 대시보드 및 정산 리포트</div>
+        </div>
+      </div>
+      <!-- 지원 채널 -->
+      <p style="font-size:0.72rem;color:var(--muted);margin-bottom:0.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;">// 지원 가능 판매 채널</p>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+        <span style="background:var(--bg3);border:1px solid var(--border);padding:0.4rem 1rem;font-size:0.78rem;border-radius:3px;">스마트스토어</span>
+        <span style="background:var(--bg3);border:1px solid var(--border);padding:0.4rem 1rem;font-size:0.78rem;border-radius:3px;">쿠팡 마켓플레이스</span>
+        <span style="background:var(--bg3);border:1px solid var(--border);padding:0.4rem 1rem;font-size:0.78rem;border-radius:3px;">G마켓 · 옥션</span>
+        <span style="background:var(--bg3);border:1px solid var(--border);padding:0.4rem 1rem;font-size:0.78rem;border-radius:3px;">11번가</span>
+        <span style="background:var(--bg3);border:1px solid rgba(0,255,157,0.3);color:var(--accent3);padding:0.4rem 1rem;font-size:0.78rem;border-radius:3px;">자사몰 구축 지원</span>
+      </div>
+      <div class="modal-bottom-grid">
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 운영 지원 범위</div>
+          <ul>
+            <li>자재 관련 소모품 판매 대행</li>
+            <li>창고 재고와 쇼핑몰 실시간 연동</li>
+            <li>고객 CS 응대 및 반품 처리</li>
+            <li>판매 데이터 기반 인기 품목 분석</li>
+            <li>시즌별 프로모션 기획 지원</li>
+          </ul>
+        </div>
+        <div class="modal-panel">
+          <div class="modal-panel-title">// 운영 경쟁 우위</div>
+          <ul>
+            <li>창고 보유 → 즉일 출고 가능</li>
+            <li>자재 원가 파악 → 가격 경쟁력</li>
+            <li>부품 전문성 → 정확한 상품 설명</li>
+            <li>수리 이력 데이터 → 수요 예측</li>
+            <li>기존 물류 인프라 재활용 → 비용 최소</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- KPI GOALS (통합) -->
 <section id="kpi" style="background:var(--bg2);">
@@ -1915,6 +2233,17 @@
   padding: 2.5rem 2rem; transition: border-color 0.3s, transform 0.3s;
 }
 .so-card:hover { border-color: var(--accent3); transform: translateY(-3px); }
+  .so-card[data-modal] { cursor: pointer; }
+  .so-card[data-modal]:hover .so-title { color: var(--accent3); transition: color 0.3s; }
+  .so-card .click-hint {
+    position: absolute; bottom: 1rem; right: 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; color: var(--accent3);
+    opacity: 0; transition: opacity 0.3s;
+    letter-spacing: 0.08em;
+  }
+  .so-card { position: relative; }
+  .so-card[data-modal]:hover .click-hint { opacity: 1; }
 .so-card-wide {
   grid-column: span 3;
   display: flex; align-items: flex-start; gap: 2rem;
@@ -2303,7 +2632,7 @@
 /* ── AI 진단 모달 인터랙션 ── */
 (function() {
   // 카드 클릭 → 모달 열기
-  document.querySelectorAll('.feature-card[data-modal]').forEach(function(card) {
+  document.querySelectorAll('.feature-card[data-modal], .so-card[data-modal]').forEach(function(card) {
     card.addEventListener('click', function() {
       var modalId = card.getAttribute('data-modal');
       var overlay = document.getElementById(modalId);
